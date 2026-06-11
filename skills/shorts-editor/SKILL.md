@@ -18,7 +18,7 @@ in-world mark. `silence_cut.py` and `composition.template.html` are co-located i
 This skill is the final edit stage after `video-prompt` (or runs standalone on any raw footage).
 
 ## Overview
-Turn a finished-but-flat talking clip into a punchy 9:16 short. Engagement is layers stacked on clean footage: a **tight silence-cut** (raw footage only — skip for AI clips), **word-by-word pop-on captions** (Anton, gold keywords, no pill backing), **native treatments** (zoom punch-ins, speed ramps, hard cuts, SFX hits — NOT glass-pill chips), and a **SFX + brand-splash** finish. The composition is HyperFrames HTML; ffmpeg cuts and masters; faster-whisper supplies timing.
+Turn a finished-but-flat talking clip into a punchy 9:16 short. Engagement is layers stacked on clean footage: a **tight silence-cut** (raw footage AND assembled AI clips — Kling pads dead air into every generated clip), **word-by-word pop-on captions** (Anton, gold keywords, no pill backing), **native treatments** (zoom punch-ins, speed ramps, hard cuts, SFX hits — NOT glass-pill chips), and a **SFX + brand-splash** finish. The composition is HyperFrames HTML; ffmpeg cuts and masters; faster-whisper supplies timing.
 
 **Core principle:** retention is manufactured by deleting dead time and giving the eye a new beat every 2-4s. Cut the pauses first; every other layer just decorates the tightened result.
 
@@ -52,23 +52,21 @@ All paths below are inside the project dir: source from `clips/`, working files 
 1. **Denoise** → `edit/audio_clean.m4a`:
    `ffmpeg -i clips/src.mp4 -af "highpass=85,afftdn,lowpass=12000,loudnorm=I=-14:TP=-1.5:LRA=11" -ar 48000 -ac 2 edit/audio_clean.m4a`
 2. **Transcribe** word timestamps with faster-whisper → `edit/transcript.json` (`[{text,start,end}]`). `small.en` only if the audio is English.
-3. **Silence-cut** with `./silence_cut.py` → `edit/tight.mp4` (the non-obvious core, see below). **SKIP this
-   step for AI-generated footage** (clips from `video-prompt` / Wyren): it is already tight and its
-   pauses are intentional comedic beats — the cutter is built for RAW talking-head dead air, not for
-   generated clips. For AI footage, go straight to assembly and keep the clips' timing. Only run the
-   silence-cut on real raw recordings (interview, vox-pop, vlog, podcast) with genuine dead air.
-4. **Re-transcribe `edit/tight.mp4`**, regroup into caption phrases (sentence-aware, 3-5 words). Cutting shifts every timestamp, so always re-transcribe the cut; never remap old times.
+3. **Silence-cut** with `./silence_cut.py` → `edit/tight.mp4` (the non-obvious core, see below). **Run this on AI-generated footage too** (clips from `video-prompt` / Wyren), not just raw recordings. Kling and similar models pad EVERY generated clip with ~1–2s of dead air — a slow lead-in plus a tail after the last word — so stacked clips drag badly. The old "AI clips are already tight, skip it" assumption is the opposite of reality. **Assemble the clips first, then silence-cut the assembled video.** For AI footage tune the cutter sensitive: `--cut-min 0.35` and a lower noise floor (`-36 dB`) to catch the quiet, breath-filled padding, leaving ~0.1s pads so only natural beats survive. Real raw recordings (interview, vox-pop, vlog, podcast) use the default settings.
+
+   **Mind the tail / SFX.** AI clips often land the FINAL WORD right at the out-point, so the ~0.1s pad after the last word matters, and **never land a transition SFX on a cut where a word ends** (it steps on the last word — see the SFX layer).
+4. **Re-transcribe the ASSEMBLED cut** (`edit/tight.mp4` — for raw footage OR an assembled AI-clip video), regroup into caption phrases (sentence-aware, 3-5 words). The silence-cut shifts every timestamp, so always re-transcribe and recompute **caption, zoom, SFX, and splash** timing from the NEW boundaries; never remap old times.
 5. **Build the composition** in `edit/composition/` from `./composition.template.html`: muted plate + separate dialogue audio + word-pop captions + zooms + logo + splash + SFX (no chips by default). Lint clean.
 6. **Draft render** (`--quality draft`) → `edit/frames/`, extract frames at every caption/splash beat, eyeball, fix. Then **`--quality high`** and **master** into `out/`:
    `ffmpeg -i edit/raw.mp4 -c:v copy -af "loudnorm=I=-14:TP=-1.5,alimiter=limit=0.95" -c:a aac -b:a 192k out/<slug>-final.mp4`
 
 ## The silence-cut (the part that is easy to get wrong)
-**Only for RAW recordings — skip entirely for AI-generated clips** (see Pipeline step 3).
+**Run on BOTH raw recordings and assembled AI-clip videos** (see Pipeline step 3). Kling pads every generated clip with ~1–2s of dead air, so AI assemblies need this just as much as raw footage — for AI clips tune sensitive (`--cut-min 0.35`, noise floor `-36 dB`).
 Neither signal alone works:
 - **silencedetect** misses pauses filled with ambient/breath above the noise floor.
 - **whisper word timestamps** are imprecise around pauses and will report contiguous words across a real ~1s gap (e.g. it claimed "So, cheating" was continuous when 0.8s of silence sat between them).
 
-**Cut where EITHER is true:** acoustic silence (`silencedetect=noise=-33dB:d=0.35`) OR a transcript word-gap > 0.45s. Only remove the dead middle when it exceeds ~0.5s, leave ~0.1s of speech pad each side, and KEEP sub-0.5s gaps (natural rhythm — cutting every micro-gap machine-guns the edit and looks glitchy). Add a 10ms `afade` at each join to kill clicks. **Verify with silencedetect on the OUTPUT** — it should show only short breath gaps. `./silence_cut.py` implements all of this; tune `--cut-min`.
+**Cut where EITHER is true:** acoustic silence (`silencedetect=noise=-33dB:d=0.35`) OR a transcript word-gap > 0.45s. Only remove the dead middle when it exceeds ~0.5s, leave ~0.1s of speech pad each side, and KEEP sub-0.5s gaps (natural rhythm — cutting every micro-gap machine-guns the edit and looks glitchy). Add a 10ms `afade` at each join to kill clicks. **Verify with silencedetect on the OUTPUT** — it should show only short breath gaps. `./silence_cut.py` implements all of this; tune `--cut-min`. **For AI-clip assemblies** (Kling et al.), the padding is quiet near-silent breath that `-33 dB` can miss — drop the noise floor to `-36 dB` and `--cut-min 0.35` to catch it.
 
 ## Layers (all face/caption-safe)
 - **Captions — word-by-word pop-on (the default):** each WORD pops in as it's spoken (Anton, UPPERCASE,
@@ -81,7 +79,7 @@ Neither signal alone works:
   hard cuts on the beat, and SFX hits. Only add a chip if the user explicitly asks for an on-screen
   label, and keep it minimal. The chip CSS/JS is removed from the default template.
 - **Zoom punch-ins:** scale the plate wrapper (base ~1.04) to ~1.10-1.14 on emphasis lines, ease back. Never scale below 1.0 (reveals letterbox edges). Cover-fit the plate.
-- **SFX:** a curated set ships in `./sfx/` — use these first (no download needed). Keep dialogue front (SFX vol 0.25-0.35); every `<audio>` needs an `id`. Mapping:
+- **SFX:** a curated set ships in `./sfx/` — use these first (no download needed). Keep dialogue front (SFX vol 0.25-0.35); every `<audio>` needs an `id`. **Never land a transition/whoosh SFX on a cut where a word ends** — it steps on the last word; put the hit on a silent beat or at the head of the next clip (this is why the silence-cut leaves ~0.1s pad after the last word, see Pipeline step 3). Mapping:
   | Role | File |
   | --- | --- |
   | Opening riser (first frame) | `./sfx/riser-high.mp3` |
@@ -106,8 +104,9 @@ Captions exist to (a) make the video legible sound-off, (b) hold retention with 
 - Captions are the **wording source of truth** — they carry the exact script even if native/synth audio
   drops a word.
 - Never cover the face — captions live in the lower third; any other graphic stays lower-mid or a top strip.
-- Derive timing from **word-level transcription of the FINAL cut** (re-transcribe after any trim). Never
-  hand-guess or remap old times.
+- Derive timing from **word-level transcription of the FINAL cut** (re-transcribe after any cut, including
+  the AI-clip silence-cut). The same re-transcription drives caption, zoom, SFX, and splash timing — recompute
+  them all from the new boundaries. Never hand-guess or remap old times.
 
 **Font / size / layout:** Anton (or a heavy grotesk like Archivo Black for premium brands), UPPERCASE by
 default (sentence case only for a strictly soft/premium voice), one caption font for the whole video,
@@ -149,6 +148,8 @@ cross-dissolves / cinematic fades · ❌ tiny text, thin weights, or a generic s
 | --- | --- |
 | `hyperframes transcribe` fails (whisper-cpp not found) | use faster-whisper directly |
 | A pause survives the cut | use silencedetect ∪ word-gap union, not either alone |
+| AI clips drag / dead air between clips | run the silence-cut on the assembled AI video (`--cut-min 0.35`, noise `-36 dB`, ~0.1s pads) — don't skip it for AI footage |
+| Last word clipped at a cut / SFX steps on speech (AI clips) | keep the ~0.1s pad after the last word; never land a transition SFX where a word ends |
 | Two captions on screen at once | clamp hard-hide to `min(end+0.12, next.start-0.06)`, floor `inAt+0.2` (see Caption standard) |
 | Font silently falls back | Anton/Archivo etc. are NOT auto-embedded; download `.woff2` to `fonts/` + `@font-face` |
 | SFX silent in the render | every `<audio>` needs an `id` |

@@ -128,7 +128,7 @@ This template runs alongside the Wyren MCP. Confirm settings with the user durin
 - **Keep the face.** When upscaling/cleaning, instruct the model to PRESERVE the existing person's identity — same face, hair, age, build, wardrobe — and only improve quality (sharpen, denoise, fix artifacts). Don't let it redraw or beautify into a different face. Use an image-edit-capable model (Nanobanana / Nanobanana Pro accept image input), pass the panel + character profile (+ `characters.png`) as references, with a prompt like "enhance and clean this frame, keep the exact same face and person, do not change identity." This face-preserving upscale is what makes per-shot start frames consistent across a multishot/multi-clip video.
 
 **Image models (category "image"):** Nanobanana (Gemini 2.5 Flash Image, 1K, image input, default), Nanobanana Pro (Gemini 3 Pro Image, up to 4K, up to 14 reference images — best for keeping persona/logo consistent), Imagen 4 Fast/Standard/Ultra (text-only, 1K–2K, no image input). Sizes: 1K/2K/4K. Aspect ratios: 1:1, 4:3, 9:16, 16:9.
-**Default:** Nanobanana Pro at 2K (image input + multi-reference locks character + logo). Pass `characters.png` and `logo.png` as reference images.
+**Default:** Nanobanana Pro at 2K (image input + multi-reference locks character + logo). Pass `characters.png` and `logo.png` as reference images — the `logo.png` file is REQUIRED whenever the mark is visible, never a text description (the model fabricates a wrong logo otherwise; see BRAND & LOGO RULES).
 
 ### Step B — generate the clips (video model, `videoAI` node)
 Video models (category "video") and key knobs:
@@ -167,6 +167,11 @@ Any time the video is more than one shot — a multi-clip split (Part 1/Part 2) 
 - Keep the CONTINUITY LOCKS (same face, hair, wardrobe, props, setting, lighting) in force.
 
 If two characters recur, build a separate profile + bible for each, and keep both references wired into every shot where they appear.
+
+**SECONDARY & BACKGROUND characters drift worst.** Per-shot generation only locks the START-FRAME subject; everyone else — the second person in a two-hander, recurring side characters, background extras — gets reinvented (face AND wardrobe) every shot. Don't rely on the bible text alone for them:
+- **Pin each recurring secondary character's wardrobe explicitly** in every shot prompt, not just the lead's (e.g. "the man in the grey zip hoodie and black cap"). Vague secondary descriptions are where the model improvises a new person.
+- **Chain that character's best generated frame back in as a reference** into their later shots: once a shot renders them well, feed that frame to `imageAI` as a reference when designing their next start frame. The image input carries multiple reference URLs, so wire BOTH characters' references in for any shot where both appear.
+- **Push extras out of focus.** Keep background people incidental, turned away, blurred, or cropped — never ask the model to hold a face it doesn't need to. An extra the viewer can't study can't visibly drift.
 
 ## DEFAULT SPLIT RULE
 If target duration is 20–30s: **Part 1 = Panels 1–5; Part 2 = Panels 6–9.** Each part feels like one continuous video. Part 2 continues the same character, wardrobe, props, lighting, setting, camera quality, and emotional energy — do not restart the story, do not recap. Never show the storyboard grid, panel numbers, production notes, borders, arrows, labels, or annotations. Convert panels into real-feeling vertical footage.
@@ -266,6 +271,8 @@ Do not add generated overlay captions unless explicitly requested. Avoid: subtit
 
 ## BRAND & LOGO RULES
 If a brand is included: use the supplied logo only if available, as a natural physical prop. Good placements: laptop sticker, tote bag, mug, notebook, badge, desk object, small office poster. Keep it subtle but recognizable, only where it naturally belongs. Do not: make it the focus, use it as an overlay/watermark, make it giant, force it into every shot, or invent a fake/distorted logo. If exact reproduction isn't possible, use a plain prop and avoid fake logo distortion. The video should feel like native content that happens to include the brand, not a brand ad.
+
+**NEVER trust the image model to draw the mark.** From a text description alone, image models fabricate the logo — wrong wordmark, invented icon — every time. **Attach the actual `../_arca-marketing-assets/assets/logo.png` file to every `imageAI` node that should show the mark** (the start-frame stage is where the logo gets baked in). If the model still can't reproduce it cleanly, leave a plain unbranded prop and add the real logo later in the edit (`shorts-editor`) — never let the model invent one.
 
 ## AUDIO DIRECTION
 Generate native audio if supported; it should feel like real creator-shot social video. Use: natural room tone, phone-mic ambience, casual dialogue, natural VO if the storyboard calls for it, imperfect human delivery, tiny pauses, keyboard taps, chair squeaks, paper sounds, phone buzzes, footsteps, desk sounds, bag rustles, small reaction sounds, subtle whoosh/riser only when helpful, light music only if it supports pacing. Native to TikTok/Reels, not cinematic. Avoid: trailer/orchestral music, dramatic swells, glossy commercial music, overproduced sound design, fake epic SFX, booming risers, ad-like or perfect-studio VO. Dialogue casual, slightly imperfect, human. If the model can't generate clean dialogue, prioritize realistic visual storytelling and leave dialogue/captions for editing.
