@@ -12,8 +12,10 @@ The simplest path (great for non-technical users): just ask your AI agent to fet
 - **Skills CLI:** `npx skills add aobalitaan/arca-marketing`
 - **In-chat:** install the `/learn` command, then `/learn @aobalitaan/arca-marketing`
 - **npm (Claude Code):** `npx arca-marketing-video` (copies the skills into `.claude/skills/`; add `--global` for `~/.claude/skills/`)
-- **Manual:** copy the **contents** of `skills/` into your agent's skills folder (`.claude/skills/`, `.cursor/skills/`, or `.agents/skills/`) so each skill folder sits exactly one level deep, and keep `_arca-marketing-assets/` beside them.
+- **Manual:** copy the **contents** of `skills/` into your project's skills folder — `./.claude/skills/` (or `./.cursor/skills/`, `./.agents/skills/`) **in the current project directory**, so each skill folder sits exactly one level deep, and keep `_arca-marketing-assets/` beside them.
 
+> **Install project-scoped, not global.** Put the skills in the project's `./.claude/skills/` (current working directory), not the global `~/.claude/skills/` in your home folder — each project keeps its own brand profile, and the skills' shared-asset paths are resolved per project. (The `npx` installer is project-scoped by default; `--global` is opt-in.)
+>
 > Skills must be exactly one level deep — `.claude/skills/<name>/SKILL.md`. Don't nest them inside an extra folder, or the agent won't discover them. If your skills folder didn't exist before, restart your agent once so it starts watching it.
 
 ## The skills
