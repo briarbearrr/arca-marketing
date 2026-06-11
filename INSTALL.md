@@ -2,8 +2,6 @@
 
 You don't need to know any commands. You just ask your AI agent (ChatGPT, Claude, Cursor, Codex…) to fetch the files for you.
 
-> Before you start: replace `OWNER/REPO` below with this repo's address (for example `arca-ph/arca-marketing-skills`).
-
 ---
 
 ## The easy way — paste this to your AI agent
@@ -14,7 +12,7 @@ Copy everything between the lines and send it to your agent:
 Please install the Arca marketing skills into this environment.
 
 1. Download every folder inside the "skills/" directory of this public GitHub repo:
-   https://github.com/OWNER/REPO/tree/main/skills
+   https://github.com/aobalitaan/arca-marketing/tree/main/skills
 
 2. Place each of those folders so it sits DIRECTLY inside my agent's skills folder
    (exactly one level deep — folder name, then SKILL.md inside it). Use the folder for my tool:
@@ -52,8 +50,8 @@ Seven folders land in your skills folder:
 
 ## Alternative installs (if you're comfortable with a terminal)
 
-- **Skills CLI:** `npx skills add OWNER/REPO`
-- **In-chat:** install the `/learn` command, then `/learn @OWNER/REPO`
+- **Skills CLI:** `npx skills add aobalitaan/arca-marketing`
+- **In-chat:** install the `/learn` command, then `/learn @aobalitaan/arca-marketing`
 - **npm (Claude Code):** `npx arca-marketing-video` (copies the skills into `.claude/skills/`)
 - **Manual:** clone the repo and copy the contents of `skills/` into your `.claude/skills/` folder.
 

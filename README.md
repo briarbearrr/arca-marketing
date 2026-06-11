@@ -9,8 +9,8 @@ The simplest path (great for non-technical users): just ask your AI agent to fet
 > The skills are plain files in this public repo, so any file-capable agent can install them — no `npx`, no terminal.
 
 ### Other ways to install
-- **Skills CLI:** `npx skills add OWNER/REPO`  *(replace `OWNER/REPO` with this repo)*
-- **In-chat:** install the `/learn` command, then `/learn @OWNER/REPO`
+- **Skills CLI:** `npx skills add aobalitaan/arca-marketing`
+- **In-chat:** install the `/learn` command, then `/learn @aobalitaan/arca-marketing`
 - **npm (Claude Code):** `npx arca-marketing-video` (copies the skills into `.claude/skills/`; add `--global` for `~/.claude/skills/`)
 - **Manual:** copy the **contents** of `skills/` into your agent's skills folder (`.claude/skills/`, `.cursor/skills/`, or `.agents/skills/`) so each skill folder sits exactly one level deep, and keep `_arca-marketing-assets/` beside them.
 
@@ -53,7 +53,7 @@ carousel-generator                                 (independent image posts)
 skills.sh indexes public GitHub repos that contain valid `SKILL.md` files. To list this kit:
 1. Push this repo public to GitHub.
 2. (Optional) Submit the repo URL at **agentskill.sh/submit** to index it.
-3. Share the install command `npx skills add OWNER/REPO` — it also auto-indexes as people install it.
+3. Share the install command `npx skills add aobalitaan/arca-marketing` — it also auto-indexes as people install it.
 
 ## License
 
