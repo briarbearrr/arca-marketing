@@ -1,0 +1,34 @@
+{
+  "name": "arca-marketing-video",
+  "version": "2.19.0",
+  "description": "Brand-driven short-form marketing content kit: seven agent skills (start-here router + brand builder, design guide, carousel generator, storyboard prompt, video prompt, shorts editor) sharing one brand profile + assets. Installable from skills.sh (any SKILL.md agent), via `npx arca-marketing-video`, or by asking your AI agent to fetch the files — see INSTALL.md.",
+  "keywords": [
+    "skill",
+    "claude",
+    "agent-skill",
+    "marketing",
+    "short-form-video",
+    "tiktok",
+    "reels",
+    "shorts",
+    "carousel",
+    "storyboard",
+    "ugc",
+    "arca"
+  ],
+  "author": "aobalitaan",
+  "license": "MIT",
+  "bin": {
+    "arca-marketing-video": "bin/cli.js"
+  },
+  "engines": {
+    "node": ">=16.7"
+  },
+  "files": [
+    "bin/",
+    "skills/",
+    "README.md",
+    "INSTALL.md",
+    "LICENSE"
+  ]
+}

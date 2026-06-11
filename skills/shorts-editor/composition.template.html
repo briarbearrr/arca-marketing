@@ -1,0 +1,128 @@
+<!doctype html>
+<!--
+  HyperFrames composition skeleton for an engaging vertical short.
+  Fill the >>> TODO <<< spots. All times are on the TIGHT (cut) timeline.
+  Layers by z-index: plate(0) < grade(1) < captions(5) < logo(6) < flash(7) < splash(8) < endfade(9).
+  Captions are word-by-word pop-on (Anton, gold keywords, no pill backing). Chips are OFF by default
+  (they read as AI/vibe-coded) — use native treatments (zooms, speed, hard cuts, SFX) instead.
+  Standalone composition: data-composition-id div lives directly in <body> (NO <template>).
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      /* Fonts are NOT auto-embedded — download .woff2 to fonts/ and declare them.
+         Reliable source: https://cdn.jsdelivr.net/npm/@fontsource/anton/files/anton-latin-400-normal.woff2 */
+      @font-face { font-family:"Anton"; font-weight:400; font-display:block; src:url("fonts/Anton-400.woff2") format("woff2"); }
+      @font-face { font-family:"Archivo"; font-weight:100 900; font-display:block; src:url("fonts/Archivo-800.woff2") format("woff2"); }
+      /* --hl = brand HIGHLIGHT color (set per brand; Arca Sun Yellow #FED21A). --hl-stroke softens the gold so it doesn't muddy. */
+      :root { --ink:#ffffff; --accent:#29abe2; --hl:#FED21A; --hl-stroke:rgba(92,58,0,.65); }
+      #root { position:absolute; inset:0; overflow:hidden; background:#05070b; font-family:"Archivo",system-ui,sans-serif; }
+      #plate-wrap { position:absolute; inset:0; overflow:hidden; z-index:0; transform-origin:50% 42%; will-change:transform; }
+      #plate-wrap video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+      #grade { position:absolute; inset:0; z-index:1; pointer-events:none; background:radial-gradient(120% 80% at 50% 40%, rgba(0,0,0,0) 56%, rgba(0,0,0,.42) 100%); }
+      /* chips are OFF by default (floating glass pills = the #1 AI-looking tell) — native treatments only: zooms, speed, hard cuts, SFX, gold keyword pops */
+      /* CAPTIONS: word-by-word pop-on, Anton, UPPERCASE, brand-gold keywords. NO pill backing — legibility is STROKE + shadow. */
+      #caps { position:absolute; left:0; right:0; bottom:300px; z-index:5; pointer-events:none; }
+      .cap { position:absolute; left:0; right:0; bottom:0; margin:0 auto; max-width:960px; padding:0 60px; box-sizing:border-box;
+             display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-end; gap:0 .28em; text-align:center;
+             font-family:"Anton",system-ui,sans-serif; font-weight:400; text-transform:uppercase;
+             font-size:88px; line-height:1.04; letter-spacing:.004em; color:var(--ink); opacity:0;
+             -webkit-text-stroke:2.75px rgba(3,8,14,.6);
+             text-shadow:0 5px 20px rgba(0,0,0,.7),0 2px 4px rgba(0,0,0,.9); }
+      .cap.big { font-size:178px; line-height:.96; letter-spacing:0; }
+      .capw { display:inline-block; will-change:transform,opacity; }
+      .capw.kw { color:var(--hl); -webkit-text-stroke-color:var(--hl-stroke); }
+      #logo { position:absolute; top:54px; right:54px; width:90px; z-index:6; opacity:0; filter:drop-shadow(0 6px 18px rgba(0,0,0,.45)); }
+      #flash { position:absolute; inset:0; z-index:7; background:#fff; opacity:0; pointer-events:none; }
+      #splash { position:absolute; inset:0; z-index:8; overflow:hidden; opacity:0; }
+      #splash img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transform-origin:50% 45%; }
+      #endfade { position:absolute; inset:0; z-index:9; background:#05070b; opacity:0; pointer-events:none; }
+    </style>
+  </head>
+  <body>
+    <!-- >>> set data-duration = videoDur + splashDur <<< -->
+    <div id="root" data-composition-id="root" data-width="1080" data-height="1920" data-start="0" data-duration="47.58">
+      <div id="plate-wrap"><video id="plate" src="tight.mp4" data-start="0" data-duration="44.58" data-media-start="0" data-track-index="0" muted playsinline></video></div>
+      <div id="grade"></div>
+      <div id="caps"></div>
+      <img id="logo" src="logo.png" alt="brand" crossorigin="anonymous" />
+      <div id="flash"></div>
+      <div id="splash"><img src="splash.png" alt="end card" crossorigin="anonymous" /></div>
+      <div id="endfade"></div>
+
+      <!-- AUDIO: muted video + separate dialogue track. EVERY <audio> needs an id or it is silent. -->
+      <audio id="dlg" src="dialogue.m4a" data-start="0" data-duration="44.58" data-media-start="0" data-track-index="2" data-volume="1"></audio>
+      <audio id="sfx-riser" src="sfx/riser-high.mp3" data-start="0" data-duration="4.0" data-media-start="0" data-track-index="3" data-volume="0.30"></audio>
+      <!-- >>> whooshes on hard cuts (track 4: swoosh-high.mp3 / swoosh-low.mp3); reserve the boom-bling for the splash only (track 6) <<< -->
+      <audio id="sfx-splash" src="sfx/tiktok-boom-bling.mp3" data-start="44.58" data-duration="0.84" data-media-start="0" data-track-index="6" data-volume="0.5"></audio>
+
+      <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+      <script src="data.js"></script>
+      <!-- window.CAPTION_GROUPS = [{ start, end, big?, words:[{w, s, e}] }, ...] from WORD-LEVEL whisper timing of the FINAL cut.
+           w=word text, s/e=that word's spoken start/end. big:true = punchline group (bigger, harder pop). -->
+      <script>
+        (function () {
+          var VID = 44.58, DUR = 47.58;            // >>> set <<<
+          var tl = gsap.timeline({ paused: true });
+
+          // gold-highlight only the 1–2 load-bearing words per line (product term, punch word, CTA verb).
+          var KW = { /* normalized keyword -> true, e.g. arca:true. Match strips punctuation: "AI-first," -> ai-first */ };
+          function isKW(w){ return !!KW[w.toLowerCase().replace(/[^a-z0-9-]/g,"")]; }
+
+          // ---- CAPTIONS: word-by-word pop-on, ONE group on screen at a time, no overlap ever ----
+          var capsEl = document.getElementById("caps"), G = window.CAPTION_GROUPS || [];
+          G.forEach(function (g, gi) {
+            var box = document.createElement("div");
+            box.className = "cap" + (g.big ? " big" : ""); box.id = "cap-" + gi;
+            (g.words || []).forEach(function (wd) {
+              var s = document.createElement("span");
+              s.className = "capw" + (isKW(wd.w) ? " kw" : "");
+              s.textContent = wd.w; box.appendChild(s);
+            });
+            capsEl.appendChild(box);
+
+            var next = (gi + 1 < G.length) ? G[gi + 1].start : DUR;
+            var inAt = Math.max(0, g.start - 0.06);
+            var hardOut = Math.min(g.end + 0.12, next - 0.06);
+            if (hardOut <= inAt + 0.2) hardOut = inAt + 0.2;
+
+            tl.fromTo(box, { opacity:0 }, { opacity:1, duration:0.1, overwrite:"auto" }, inAt);
+            box.querySelectorAll(".capw").forEach(function (sp, wi) {
+              var ease = g.big ? "back.out(4)" : "back.out(2.8)";
+              tl.fromTo(sp, { opacity:0, scale:0.5, y:16 },
+                { opacity:1, scale:1, y:0, duration:0.2, ease:ease, overwrite:"auto" },
+                Math.max(inAt, g.words[wi].s - 0.04));
+            });
+            tl.to(box, { opacity:0, y:-12, duration:0.16, ease:"power2.in", overwrite:"auto" }, hardOut - 0.16);
+            tl.set(box, { opacity:0, y:0, visibility:"hidden" }, hardOut);
+          });
+
+          // ---- CHIPS removed from default — use native treatments: zoom punch-ins, speed ramps, hard cuts, SFX hits ----
+
+          // ---- ZOOM PUNCH-INS on the plate (never below 1.0) ----
+          var W = "#plate-wrap", BASE = 1.04;
+          tl.set(W, { scale: BASE, transformOrigin:"50% 42%" }, 0);
+          [ /* {at,p,h} */ ].forEach(function (z) {
+            tl.to(W, { scale:z.p, duration:0.42, ease:"power2.out" }, z.at);
+            tl.to(W, { scale:BASE, duration:1.05, ease:"power2.inOut" }, z.at + z.h);
+          });
+
+          // ---- LOGO / FLASH / SPLASH / END ----
+          tl.fromTo("#logo", { opacity:0, y:-10 }, { opacity:0.9, y:0, duration:0.6, ease:"power2.out" }, 0.6);
+          tl.to("#logo", { opacity:0, duration:0.25 }, VID - 0.2);
+          tl.fromTo("#flash", { opacity:0 }, { opacity:0.85, duration:0.1 }, VID - 0.08);
+          tl.to("#flash", { opacity:0, duration:0.4 }, VID + 0.05);
+          tl.fromTo("#splash", { opacity:0 }, { opacity:1, duration:0.28 }, VID);
+          tl.fromTo("#splash img", { scale:1.07 }, { scale:1.0, duration:0.45, ease:"power3.out" }, VID);
+          tl.to("#splash img", { scale:1.05, duration:DUR - VID - 0.45, ease:"sine.inOut" }, VID + 0.45);
+          tl.to("#endfade", { opacity:1, duration:0.35, ease:"power2.in" }, DUR - 0.3);
+
+          tl.seek(0);
+          window.__timelines = window.__timelines || {};
+          window.__timelines["root"] = tl;
+        })();
+      </script>
+    </div>
+  </body>
+</html>
