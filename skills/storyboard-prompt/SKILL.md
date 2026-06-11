@@ -244,7 +244,7 @@ Output everything written as TEXT, separate from the board image. This carries t
 Keep it tight and scannable. The FLOW table's Dialogue + Direction columns are REQUIRED (write the real lines and the delivery notes — don't defer them); only a genuinely silent beat gets "—" in Dialogue. The production board (Phase 8) plus this text breakdown are the two deliverables — never merge the full text into the image.
 
 ## PHASE 8C: VIDEO-PROMPT HANDOFF (copy-paste text)
-After the board renders, output ONE compact, ready-to-paste block the user hands to `video-prompt` together with the board image. Brief but complete — it carries the dialogue, delivery/emotion, flow, and build instructions so the next skill needs nothing else. Pull dialogue + delivery straight from the FLOW table's Dialogue + Direction columns; keep each shot to one line. Template:
+ALWAYS output this block — it is a REQUIRED deliverable, produced from the FLOW table whether or not the board image was rendered (don't gate it on a successful render or a connected image model). If the board is already rendered, tell the user to attach it; if not, say "attach the board once you generate it." Output it right after the text breakdown (Phase 8B), and again next to the board if/when it renders. It's ONE compact, ready-to-paste block the user hands to `video-prompt` — brief but complete, carrying the dialogue, delivery/emotion, flow, and build instructions so the next skill needs nothing else. Pull dialogue + delivery straight from the FLOW table's Dialogue + Direction columns; keep each shot to one line. Template:
 
 ```
 === HANDOFF → video-prompt (attach the rendered board image + brand.md) ===
@@ -285,7 +285,7 @@ After the storyboard, write 2 practical social captions for the target audience.
 7. Clarification checkpoint — confirm DIRECTION and ask any open questions (skip with one line if already clear and approved)
 8. Board prompt + text breakdown (Step 8-i) — show the finalized image-gen prompt for the landscape board (shared choices, character reference, environment + floor plan, storyboard strip, lighting/mood) AND the text breakdown (video concept, shared choices, characters, environment, 6-column flow table, editor notes, style notes, brand/logo notes); state assumptions and refine with the user. No image yet.
 9. Confirm + GENERATE (Step 8-ii) — ask "generate the board now, or changes first?"; on an explicit go, render the board via Wyren imageAI (Nanobanana Pro, brand refs) and present it; offer one refine-and-regenerate pass if a panel drifts.
-10. video-prompt handoff (Phase 8C) — the compact copy-paste block (type, look lock, characters+bibles, how to use the board, per-cut shot list with dialogue + delivery, edit note)
+10. video-prompt handoff (Phase 8C) — the compact copy-paste block (type, look lock, characters+bibles, how to use the board, per-cut shot list with dialogue + delivery, edit note). ALWAYS output this, even if the board render was skipped or failed — it's built from the text, not the image.
 11. Audience captions
 
 Do not skip the written strategy before the board. Do not build the board from the raw idea. Keep the image PANELS clean (no burned-in captions/notes/numbers); only the board scaffolding carries short section labels, and all detailed writing goes in the text breakdown. For UGC: don't make it cinematic or AI-polished, and don't make people/background/lighting/camera too perfect; for non-UGC types, match that type's craft instead.
