@@ -25,9 +25,16 @@ PART A — install the skills (always do this):
 3. Also copy the "_arca-marketing-assets" folder into that same project skills folder, right
    next to the skill folders. Every skill reads the brand profile and assets from it.
 
-PART B — set up the video tools (only needed for the shorts-editor skill; skip if you can't):
-4. If Node.js is available, run:  npx hyperframes@latest doctor
-5. Install anything it reports missing — usually ffmpeg and Google Chrome.
+PART B — set up the generation + video tools (skip a step if this environment can't run it):
+4. Wyren MCP — powers the AI image/video generation in storyboard-prompt and video-prompt.
+   In THIS project run:  npx wyren-mcp
+   (project-scoped; add --global only if you want it in every project.) A browser opens with a
+   short code — approve it while logged in to my Wyren account. (Claude Code. On another agent
+   instead run:  claude mcp add --transport http wyren https://api.wyren.ai/mcp  — or add that
+   URL as an HTTP MCP server.)
+5. HyperFrames video editing — needed for the shorts-editor skill. If Node.js is available, run:
+   npx hyperframes@latest doctor   and install anything it reports missing (usually ffmpeg and
+   Google Chrome).
 6. Install the captions tool:  pip install faster-whisper
 7. Run "npx hyperframes@latest doctor" again to confirm it's green.
 
@@ -56,17 +63,18 @@ Seven folders land in your project's skills folder (`./.claude/skills/` in the c
 
 ---
 
-## About the video tools (Part B above)
+## About the generation + video tools (Part B above)
 
-The image skills (`brand-builder`, `design-guide`, `carousel-generator`, `storyboard-prompt`) need nothing extra. Only the **video editing** skill (`shorts-editor`) needs **HyperFrames** + a few free tools — Node.js, ffmpeg, Google Chrome, and faster-whisper (for captions). Part B of the paste above sets these up; you don't need a second prompt.
+The planning/text skills (`brand-builder`, `carousel-generator` as prompts) need nothing extra. Two things power the rest:
 
-Manual equivalent, if you'd rather do it yourself:
-- `npx hyperframes@latest doctor` — checks ffmpeg + Chrome and lists what's missing
-- **ffmpeg** — `brew install ffmpeg` (Mac), `sudo apt install ffmpeg` (Linux), or a build from ffmpeg.org (Windows)
-- **Google Chrome** — HyperFrames renders frames with it
-- **faster-whisper** — `pip install faster-whisper` (word-level captions)
+- **Wyren MCP** (`npx wyren-mcp`) — connects the AI image/video generation that `storyboard-prompt` (renders the board) and `video-prompt` (generates clips) use. It's **project-scoped by default** (current directory) and approves via your browser logging into Wyren; it also installs a small local render worker. On agents other than Claude Code, add the HTTP server instead: `claude mcp add --transport http wyren https://api.wyren.ai/mcp` (or register `https://api.wyren.ai/mcp` as an HTTP MCP).
+- **HyperFrames + ffmpeg + Chrome + faster-whisper** — only the **video editing** skill (`shorts-editor`) needs these:
+  - `npx hyperframes@latest doctor` — checks ffmpeg + Chrome and lists what's missing
+  - **ffmpeg** — `brew install ffmpeg` (Mac), `sudo apt install ffmpeg` (Linux), or a build from ffmpeg.org (Windows)
+  - **Google Chrome** — HyperFrames renders frames with it
+  - **faster-whisper** — `pip install faster-whisper` (word-level captions)
 
-> Heads-up: Part B needs a real machine/sandbox that can install ffmpeg + Chrome. If your environment can't, Part A still works — do everything up through generating the clips, then run the final edit on a computer that can.
+> Heads-up: the editing tools need a real machine/sandbox that can install ffmpeg + Chrome. If your environment can't, Part A + Wyren still work — generate everything (board, clips) and run the final edit on a computer that can.
 
 ---
 

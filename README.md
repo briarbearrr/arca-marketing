@@ -32,7 +32,7 @@ The simplest path (great for non-technical users): just ask your AI agent to fet
 
 After installing, say **"use arca-marketing"** (or just describe what you want).
 
-> **Making videos?** `shorts-editor` renders with **HyperFrames** (needs Node.js + ffmpeg + Google Chrome + faster-whisper). The image skills need none of that. See **[INSTALL.md → Set up the video tools](INSTALL.md)** — your agent can install them for you.
+> **Making videos?** Two extra pieces (your agent can set both up — see **[INSTALL.md → Part B](INSTALL.md)**): **Wyren MCP** (`npx wyren-mcp`, project-scoped) powers the AI image/video generation in `storyboard-prompt` + `video-prompt`; **HyperFrames** (+ ffmpeg, Chrome, faster-whisper) is needed only by `shorts-editor`. The planning/text skills need neither.
 
 ## Shared brand profile + assets
 
