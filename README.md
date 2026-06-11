@@ -30,6 +30,8 @@ The simplest path (great for non-technical users): just ask your AI agent to fet
 
 After installing, say **"use arca-marketing"** (or just describe what you want).
 
+> **Making videos?** `shorts-editor` renders with **HyperFrames** (needs Node.js + ffmpeg + Google Chrome + faster-whisper). The image skills need none of that. See **[INSTALL.md → Set up the video tools](INSTALL.md)** — your agent can install them for you.
+
 ## Shared brand profile + assets
 
 All skills read brand specifics from one place, so the kit is reusable for any brand:

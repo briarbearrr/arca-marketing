@@ -32,5 +32,8 @@ Video projects share one folder: `video-prompt` writes clips into `<project>/cli
 ## How the brand stays consistent
 All six skills read `_arca-marketing-assets/brand.md` (your brand profile) and `_arca-marketing-assets/assets/` (logo, characters, design board, end card). To switch the kit to a different brand, run `brand-builder` again (rewrites `brand.md`), swap in that brand's `logo.png`, and re-run `design-guide`.
 
+## Video tools (only for `shorts-editor`)
+Editing footage into a finished short uses **HyperFrames** (Node.js + ffmpeg + Google Chrome + faster-whisper for captions). The image skills and `video-prompt`'s clip generation don't need it. If the user is heading into `shorts-editor` and the tools aren't set up, point them to the kit's INSTALL.md "Set up the video tools" step (the agent can run `npx hyperframes@latest doctor`, install ffmpeg/Chrome, and `pip install faster-whisper`).
+
 ## If a skill seems missing
 The kit is six skill folders that live one level deep in your agent's skills folder (e.g. `.claude/skills/<name>/SKILL.md`), plus the shared `_arca-marketing-assets/` folder beside them. If a skill doesn't trigger, the folder is probably nested too deep or the assets folder is missing — see the kit's README install steps.
