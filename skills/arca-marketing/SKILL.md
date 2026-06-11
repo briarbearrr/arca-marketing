@@ -33,7 +33,7 @@ Video projects share one folder: `video-prompt` writes clips into `<project>/cli
 All six skills read `_arca-marketing-assets/brand.md` (your brand profile) and `_arca-marketing-assets/assets/` (logo, characters, design board, end card). To switch the kit to a different brand, run `brand-builder` again (rewrites `brand.md`), swap in that brand's `logo.png`, and re-run `design-guide`.
 
 ## Generation + video tools
-- **Wyren MCP** (`npx wyren-mcp`, project-scoped) powers AI image/video generation — needed when `storyboard-prompt` renders the board and when `video-prompt` generates clips. If those skills can't reach `mcp__wyren__*`, point the user to INSTALL.md Part B (run `npx wyren-mcp` and approve in the browser; or add the HTTP MCP `https://api.wyren.ai/mcp`).
+- **Wyren MCP + the `wyren` skill** (`npx wyren-mcp`, project-scoped) power AI image/video generation — needed when `storyboard-prompt` renders the board and when `video-prompt` generates clips. `npx wyren-mcp` installs BOTH the MCP server and the `wyren` agent skill into the project (`./.claude/skills/wyren/`); the `wyren` skill is not bundled in this kit (it comes from wyren-mcp). If those skills can't reach `mcp__wyren__*` OR the `wyren` skill folder is missing, point the user to INSTALL.md Part B (run `npx wyren-mcp` in the project and approve in the browser; or add the HTTP MCP `https://api.wyren.ai/mcp`).
 - **HyperFrames** (Node.js + ffmpeg + Google Chrome + faster-whisper) is needed ONLY by `shorts-editor` for the final edit. If it's not set up, point to INSTALL.md Part B (`npx hyperframes@latest doctor`, install ffmpeg/Chrome, `pip install faster-whisper`).
 The planning/text skills (`brand-builder`, `carousel-generator` as prompts) need neither.
 

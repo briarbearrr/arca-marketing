@@ -1,13 +1,13 @@
 {
   "name": "arca-marketing-video",
-  "version": "2.21.1",
+  "version": "2.22.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aobalitaan/arca-marketing.git"
+    "url": "git+https://github.com/briarbearrr/arca-marketing.git"
   },
-  "homepage": "https://github.com/aobalitaan/arca-marketing#readme",
+  "homepage": "https://github.com/briarbearrr/arca-marketing#readme",
   "bugs": {
-    "url": "https://github.com/aobalitaan/arca-marketing/issues"
+    "url": "https://github.com/briarbearrr/arca-marketing/issues"
   },
   "description": "Brand-driven short-form marketing content kit: seven agent skills (start-here router + brand builder, design guide, carousel generator, storyboard prompt, video prompt, shorts editor) sharing one brand profile + assets. Installable from skills.sh (any SKILL.md agent), via `npx arca-marketing-video`, or by asking your AI agent to fetch the files — see INSTALL.md.",
   "keywords": [

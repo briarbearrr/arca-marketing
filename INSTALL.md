@@ -13,7 +13,7 @@ Please set up the Arca marketing kit in this environment.
 
 PART A — install the skills (always do this):
 1. Download every folder inside the "skills/" directory of this public GitHub repo:
-   https://github.com/aobalitaan/arca-marketing/tree/main/skills
+   https://github.com/briarbearrr/arca-marketing/tree/main/skills
 2. Install them into THIS PROJECT (the current working directory) — NOT globally in my home
    folder. Use the project-scoped skills folder, creating it if it doesn't exist; place each
    skill folder DIRECTLY inside it (exactly one level deep — folder name, then SKILL.md inside).
@@ -29,9 +29,11 @@ PART B — set up the generation + video tools (skip a step if this environment 
 4. Wyren MCP — powers the AI image/video generation in storyboard-prompt and video-prompt.
    In THIS project run:  npx wyren-mcp
    (project-scoped; add --global only if you want it in every project.) A browser opens with a
-   short code — approve it while logged in to my Wyren account. (Claude Code. On another agent
-   instead run:  claude mcp add --transport http wyren https://api.wyren.ai/mcp  — or add that
-   URL as an HTTP MCP server.)
+   short code — approve it while logged in to my Wyren account. This ALSO installs the "wyren"
+   agent skill into this project (./.claude/skills/wyren) — storyboard-prompt and video-prompt
+   need it, so confirm that folder exists afterward. (Claude Code. On another agent instead run:
+   claude mcp add --transport http wyren https://api.wyren.ai/mcp  — or add that URL as an HTTP
+   MCP server; note this manual route registers the MCP but does NOT copy the wyren skill.)
 5. HyperFrames video editing — needed for the shorts-editor skill. If Node.js is available, run:
    npx hyperframes@latest doctor   and install anything it reports missing (usually ffmpeg and
    Google Chrome).
@@ -67,7 +69,7 @@ Seven folders land in your project's skills folder (`./.claude/skills/` in the c
 
 The planning/text skills (`brand-builder`, `carousel-generator` as prompts) need nothing extra. Two things power the rest:
 
-- **Wyren MCP** (`npx wyren-mcp`) — connects the AI image/video generation that `storyboard-prompt` (renders the board) and `video-prompt` (generates clips) use. It's **project-scoped by default** (current directory) and approves via your browser logging into Wyren; it also installs a small local render worker. On agents other than Claude Code, add the HTTP server instead: `claude mcp add --transport http wyren https://api.wyren.ai/mcp` (or register `https://api.wyren.ai/mcp` as an HTTP MCP).
+- **Wyren MCP** (`npx wyren-mcp`) — connects the AI image/video generation that `storyboard-prompt` (renders the board) and `video-prompt` (generates clips) use. It's **project-scoped by default** (current directory), approves via your browser logging into Wyren, and installs three things into the project: the MCP server, the **`wyren` agent skill** (`./.claude/skills/wyren/` — the kit's video skills load it before any Wyren call), and a small local render worker. The `wyren` skill is NOT bundled in this Arca repo on purpose — it's maintained upstream and comes from `npx wyren-mcp`, so it's always current. (Already have it only globally from a past `--global` run? Re-run `npx wyren-mcp` without `--global` inside the project to add the project copy; the global one also works since Claude loads global + project skills.) On agents other than Claude Code, add the HTTP server instead: `claude mcp add --transport http wyren https://api.wyren.ai/mcp` (or register `https://api.wyren.ai/mcp` as an HTTP MCP) — but that route does not copy the skill.
 - **HyperFrames + ffmpeg + Chrome + faster-whisper** — only the **video editing** skill (`shorts-editor`) needs these:
   - `npx hyperframes@latest doctor` — checks ffmpeg + Chrome and lists what's missing
   - **ffmpeg** — `brew install ffmpeg` (Mac), `sudo apt install ffmpeg` (Linux), or a build from ffmpeg.org (Windows)
@@ -80,8 +82,8 @@ The planning/text skills (`brand-builder`, `carousel-generator` as prompts) need
 
 ## Alternative installs (if you're comfortable with a terminal)
 
-- **Skills CLI:** `npx skills add aobalitaan/arca-marketing`
-- **In-chat:** install the `/learn` command, then `/learn @aobalitaan/arca-marketing`
+- **Skills CLI:** `npx skills add briarbearrr/arca-marketing`
+- **In-chat:** install the `/learn` command, then `/learn @briarbearrr/arca-marketing`
 - **npm (Claude Code):** `npx arca-marketing-video` (copies the skills into `.claude/skills/`)
 - **Manual:** clone the repo and copy the contents of `skills/` into this project's `./.claude/skills/` folder (not the global `~/.claude/skills/`).
 

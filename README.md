@@ -9,8 +9,8 @@ The simplest path (great for non-technical users): just ask your AI agent to fet
 > The skills are plain files in this public repo, so any file-capable agent can install them — no `npx`, no terminal.
 
 ### Other ways to install
-- **Skills CLI:** `npx skills add aobalitaan/arca-marketing`
-- **In-chat:** install the `/learn` command, then `/learn @aobalitaan/arca-marketing`
+- **Skills CLI:** `npx skills add briarbearrr/arca-marketing`
+- **In-chat:** install the `/learn` command, then `/learn @briarbearrr/arca-marketing`
 - **npm (Claude Code):** `npx arca-marketing-video` (copies the skills into `.claude/skills/`; add `--global` for `~/.claude/skills/`)
 - **Manual:** copy the **contents** of `skills/` into your project's skills folder — `./.claude/skills/` (or `./.cursor/skills/`, `./.agents/skills/`) **in the current project directory**, so each skill folder sits exactly one level deep, and keep `_arca-marketing-assets/` beside them.
 
@@ -32,7 +32,7 @@ The simplest path (great for non-technical users): just ask your AI agent to fet
 
 After installing, say **"use arca-marketing"** (or just describe what you want).
 
-> **Making videos?** Two extra pieces (your agent can set both up — see **[INSTALL.md → Part B](INSTALL.md)**): **Wyren MCP** (`npx wyren-mcp`, project-scoped) powers the AI image/video generation in `storyboard-prompt` + `video-prompt`; **HyperFrames** (+ ffmpeg, Chrome, faster-whisper) is needed only by `shorts-editor`. The planning/text skills need neither.
+> **Making videos?** Two extra pieces (your agent can set both up — see **[INSTALL.md → Part B](INSTALL.md)**): **`npx wyren-mcp`** (project-scoped) installs the Wyren MCP **and the `wyren` agent skill** into the project — both power the AI image/video generation in `storyboard-prompt` + `video-prompt`; **HyperFrames** (+ ffmpeg, Chrome, faster-whisper) is needed only by `shorts-editor`. The planning/text skills need neither.
 
 ## Shared brand profile + assets
 
@@ -57,7 +57,7 @@ carousel-generator                                 (independent image posts)
 skills.sh indexes public GitHub repos that contain valid `SKILL.md` files. To list this kit:
 1. Push this repo public to GitHub.
 2. (Optional) Submit the repo URL at **agentskill.sh/submit** to index it.
-3. Share the install command `npx skills add aobalitaan/arca-marketing` — it also auto-indexes as people install it.
+3. Share the install command `npx skills add briarbearrr/arca-marketing` — it also auto-indexes as people install it.
 
 ## License
 
