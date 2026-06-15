@@ -102,11 +102,18 @@ Generate each slide as a separate standalone image. Do NOT generate all slides i
 - Safe area: keep important text/faces away from edges; ~80–120 px safe margin all sides; headline large enough for mobile; place logo/name mark consistently (usually bottom-left, bottom-right, or top-left per layout) and subtly — never competing with the headline.
 - Repurposing: square 1:1 1080×1080; stories/reels covers 9:16 1080×1920. Default to 4:5 portrait unless specified.
 
-### Carousel image generation rule
-Produce separate images: Slide 1, Slide 2, Slide 3, (Slide 4 if needed), (Slide 5 if needed). All must share: same visual style, color system, typography style, logo-placement logic, illustration style, graphic motif family, and level of polish. Each slide visually distinct but clearly part of the same carousel.
+### GENERATE ONE SLIDE AT A TIME (hard rule + workflow)
+**Never render the slides together. One render = one slide.** No grid, no contact sheet, no 2×2 / 3×3 board, no "all slides in one image", no multi-panel composite, no brand board. A combined image is an instant fail — discard it and re-render as separate slides. (Asking an image model for "the whole carousel" reliably produces a cramped grid with unreadable text; one slide per render is the only way to get full-resolution, legible, mobile-ready slides.)
 
-Continuity SHOULD come from: consistent type hierarchy, consistent palette, recurring background texture, consistent safe margins, restrained highlight emphasis, and 1 recurring object/motif repeated across slides.
-Continuity should NOT come from: repeating every object, the same busy brand-world scene everywhere, forcing the logo into every large visual moment, or packing every slide with the full brand system.
+**Render sequentially, anchoring every slide to Slide 1:**
+1. **Render Slide 1 first** as a single standalone 4:5 image. This locks the carousel's look — palette, type hierarchy, layout rhythm, safe margins, logo placement, illustration style. Review it; re-render until it's right BEFORE touching the rest (everything inherits from it).
+2. **Render Slides 2…N one at a time**, and feed the rendered Slide 1 back into the image tool as a **style reference** for each (optionally the immediately-previous slide too). Separate per-slide renders drift in style/palette/type unless every slide is anchored to Slide 1 — passing it as a reference is what makes independent renders read as one cohesive carousel.
+3. **Review each slide before rendering the next.** If a slide drifts in style, breaks the ELEMENT BUDGET, or its text renders badly, fix and re-render THAT slide before moving on — don't batch-fix at the end.
+
+*Tool note (if rendering via Wyren `imageAI`): one `imageAI` node/call per slide, with Slide 1's output wired in as a reference image for slides 2…N. Never one node asked to produce all slides. Validate the cheap image tier before spending — load the `wyren` skill first.*
+
+Continuity SHOULD come from: anchoring every slide to Slide 1's rendered look, consistent type hierarchy, consistent palette, recurring background texture, consistent safe margins, restrained highlight emphasis, and 1 recurring object/motif repeated across slides. Each slide visually distinct but clearly part of the same carousel.
+Continuity should NOT come from: rendering them together, repeating every object, the same busy brand-world scene everywhere, forcing the logo into every large visual moment, or packing every slide with the full brand system.
 
 ## CREATIVE STYLE OPTIONS
 Choose the best direction for the topic.
@@ -129,9 +136,31 @@ Choose 3, 4, or 5 slides based on how much the topic needs.
 
 Optional: Slide 2 may be "the answer to the hook" when the hook creates curiosity that needs immediate resolution — only if it improves narrative flow.
 
+## HOOK & SWIPE-MOMENTUM (the content engine — read before writing copy)
+Carousels grow by earning swipes: every swipe is an engagement signal that pushes the post to more people, so the writing's whole job is to make the reader open the post and keep swiping. Weak copy is the #1 reason a well-designed carousel dies. Write to these:
+
+**Slide 1 is the whole ballgame — treat it like a YouTube thumbnail + title.** Its only job is to make the reader feel they MUST swipe. Not to inform, not to summarize — to create an itch the next slide scratches. If Slide 1 can be fully understood and "closed" on its own, you've already lost the swipe.
+
+**Open the loop; don't close it.** The hook names a tension, question, or surprising claim and deliberately withholds the payoff — the answer lives on the next slide ("The reason your backlog never shrinks isn't more work →"). Resolve it too early and there's no reason to keep going.
+
+**Kill the boring carousel.** The dead format is a solid-color background with a generic listicle hook ("3 tips for losing weight") — instantly skippable. Ban templated "X tips for Y" headlines, generic motivational filler, and vague "you need to hear this." Be specific, surprising, contrarian, or personal instead.
+
+**Hook formulas — pick one, tailor to the audience + brand voice (see `brand.md` hook examples):**
+- **Curiosity gap** — tease a result or mechanism without revealing it ("Most founders fix the wrong bottleneck first.").
+- **Contrarian / pattern interrupt** — challenge a belief the audience holds ("Stop hiring more people. It's making you slower.").
+- **Breaking-news framing** — state it like a fresh headline or announcement; urgency and newness pull the swipe.
+- **Costly-mistake call-out** — name a specific mistake the reader recognizes they're making ("This one habit is quietly killing your week.").
+- **Number + payoff with an open loop** — the number promises, the slides deliver; never a flat list dumped on slide 1.
+- **Identity call-out** — name the exact audience so they self-select ("Founders who still run their own ops — this one's for you.").
+- **Relatable truth / story-open** — start mid-tension or on a painfully familiar moment so they feel seen.
+
+**Every slide ends with a reason to swipe.** Build momentum: end each slide on an incomplete thought, a "but here's the problem…", a cliffhanger, a numbered progression (1→2→3), or a question the next slide answers. No slide should feel like a comfortable stopping point until the CTA.
+
+**Write for shares and saves, not just reads.** The most-distributed carousels are also the most shareable — content that makes the reader look smart, feel seen, or want to send it to someone. A line reframed for two competing sub-audiences earns shares from both. Specific beats generic; concrete pain beats abstract benefit, every time.
+
 ## SLIDE STRATEGY
 
-**Slide 1 — Hook** (most important; must stop the scroll). Strongest visual composition in the carousel; short intriguing headline readable in under 2 seconds; names a painful truth, hidden bottleneck, or costly mistake; one bold visual metaphor from the visual world; instantly understandable before the caption. Hook angles (see profile for on-brand lines, tailor to audience): reframe a common assumption ("X is not a Y problem."), name the real bottleneck, call out a costly overlooked mistake, or challenge popular advice. *Visual: can be boldest, but only one clear anchor. Split-screen → keep each side simple/high-contrast. Character → clean background. Metaphor → no second metaphor.*
+**Slide 1 — Hook** (most important; must stop the scroll AND force the swipe — apply the HOOK & SWIPE-MOMENTUM rules above). Strongest visual composition in the carousel; short intriguing headline readable in under 2 seconds; names a painful truth, hidden bottleneck, or costly mistake; one bold visual metaphor from the visual world; instantly understandable before the caption. Hook angles (see profile for on-brand lines, tailor to audience): reframe a common assumption ("X is not a Y problem."), name the real bottleneck, call out a costly overlooked mistake, or challenge popular advice. *Visual: can be boldest, but only one clear anchor. Split-screen → keep each side simple/high-contrast. Character → clean background. Metaphor → no second metaphor.*
 
 **Slide 2 — Problem / Tension.** Make the pain concrete but don't visualize every symptom — usually the simplest slide after the hook; isolate the core tension with one clean metaphor. Show what's breaking (use the topic's specific pains): core friction/blocker/cost the audience feels, the symptom that keeps returning, unclear ownership or broken handoff, wasted time or effort. Good visuals: one person facing a single growing problem stack; one blocked path between two states; one messy pile beside one clean headline; one calendar page showing delay; one task stack with a single warning label; one split desk with very few props. Avoid: many props/labels/objects in one slide; more than two piles; more than three small labels; detailed paperwork with readable microcopy; a full overhead desk scene unless most objects are abstract/unlabeled. Feel: "Here is the bottleneck," not "Here are all the objects related to the bottleneck."
 
@@ -144,7 +173,7 @@ Optional: Slide 2 may be "the answer to the hook" when the hook creates curiosit
 Slide pacing: 1 boldest/clearest hook → 2 simplest/clearest bottleneck → 3 calm reframe → 4 structured framework → 5 spacious CTA.
 
 ## COPY RULES
-One main idea per slide. Big headline first; short supporting copy only; no walls of text. Use audience-specific language; prefer concrete pain over abstract benefits. Avoid generic AI buzzwords and corporate filler. Every slide earns the next swipe. Plain, direct language. Hook feels smart, not clickbait; CTA feels helpful, not desperate.
+One main idea per slide. Big headline first; short supporting copy only; no walls of text. Use audience-specific language; prefer concrete pain over abstract benefits. Avoid generic AI buzzwords and corporate filler. **Every slide earns the next swipe** (open-loop endings, per HOOK & SWIPE-MOMENTUM). Plain, direct language. Hook feels smart, not clickbait; CTA feels helpful, not desperate. **No templated "X tips for Y" listicle headlines and no generic motivational filler** — specific, surprising, or contrarian only. The headline must do most of the work; if blurring the visual leaves the message intact, the copy is strong enough.
 
 ## DESIGN RULES
 Each slide looks like part of one cohesive campaign. Use: the brand logo somewhere (name written per profile rules), bold contrast, strong typography, generous negative space, clean editorial composition, restrained brand-world details, one clear visual anchor, highlight color sparingly, and off-white/accent/dark backgrounds strategically.
@@ -240,7 +269,7 @@ Describe the recurring visual elements across all slides. Include:
 - visual simplicity rule for this specific carousel
 ```
 
-Then create each slide separately. Each slide block uses these fields:
+Then create each slide separately — and render them ONE AT A TIME (Slide 1 first, then each later slide with Slide 1 wired in as a style reference; see GENERATE ONE SLIDE AT A TIME). Never render the set as a grid/board. Each slide block uses these fields:
 
 **SLIDE 1 — HOOK**
 - Purpose: [what this slide does strategically]
@@ -278,6 +307,9 @@ Then create each slide separately. Each slide block uses these fields:
 **CAPTION:**
 Write a practical social caption for the target audience. Expand the idea without simply repeating the slides. Direct, useful, audience-aware. No em dash. Max 3 short paragraphs, 2 sentences each. End with a soft brand CTA. Include up to 5 SEO-helpful, not-overly-specific hashtags.
 
+**POSTING TIP (include once for the user):**
+Remind the user to **add music to the carousel before posting** (the audio option below the caption). It lifts engagement, and on Instagram it makes the carousel eligible to surface on the Reels tab — a real reach boost for a static post.
+
 ---
 
 ## FINAL SELF-CHECK BEFORE OUTPUT
@@ -294,5 +326,8 @@ Check every slide:
 10. Carousel still premium, human, practical, on-brand?
 11. ELEMENT BUDGET COUNT: literally count for this slide — text zones (cap 2: headline + one line), UI cards (cap 1, anchor only), speech/thought bubbles (must be 0), scattered decorations like pins/dashes/sparkles/rays (must be 0). Over on any? Cut before outputting.
 12. Did every image prompt end with the RENDER-ONLY enforcement line?
+13. **Hook test:** does Slide 1 open a curiosity loop that makes the swipe feel irresistible — not a generic "X tips" listicle or a self-contained statement that needs no swipe?
+14. **Swipe-momentum:** does every slide end with a reason to keep swiping (open loop / cliffhanger / progression), all the way to the CTA?
+15. **One-at-a-time render:** is each slide its own standalone image (no grid/board), rendered Slide 1 first with Slide 1 fed back as the style reference for the rest?
 
-If any answer is no, simplify before outputting. When unsure, remove the element — restraint always wins.
+If any answer is no, fix before outputting — sharpen the hook, simplify the slide, or re-render. When unsure on visuals, remove the element — restraint always wins; when unsure on copy, make it more specific and open the loop wider.
