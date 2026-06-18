@@ -86,7 +86,6 @@ Neither signal alone works:
   | Hard cut / speaker change | `./sfx/swoosh-high.mp3`, `./sfx/swoosh-low.mp3` |
   | Chip entrance / key reveal (pop) | `./sfx/ding.mp3` |
   | Brand-splash signature hit (reserve for splash only) | `./sfx/tiktok-boom-bling.mp3` |
-  | Glitch / error beat | `./sfx/glitch.mp3` |
   | "Wrong"/mistake beat | `./sfx/wrong.mp3` |
   | Comedic deflation | `./sfx/sad-violin.mp3` |
   Need something not here? Mixkit free SFX (`mixkit.co/free-sound-effects/<cat>/` → `assets.mixkit.co/.../<id>-preview.mp3`) is a reliable no-key source.
@@ -172,4 +171,4 @@ The #1 overlay failure is text or a figure landing ON someone's face. "Captions 
 ## Files
 - `./silence_cut.py` — silence ∪ word-gap cutter: `--src --audio --transcript --out [--cut-min 0.5]`.
 - `./composition.template.html` — HyperFrames composition skeleton (plate, word-pop captions, zooms, splash, SFX; chips removed from default) with the load-bearing GSAP logic already wired.
-- `./sfx/` — bundled, ready-to-use SFX (riser, swooshes, ding, tiktok-boom-bling, glitch, wrong, sad-violin). See the SFX mapping above.
+- `./sfx/` — bundled, ready-to-use SFX (riser, swooshes, ding, tiktok-boom-bling, wrong, sad-violin). See the SFX mapping above.
