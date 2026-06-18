@@ -25,6 +25,17 @@ Before generating, ask for any of these not already provided, then wait for answ
 
 Only make smart, briefly-stated assumptions for what's still missing. If the user names a budget or "cheapest/fastest", pick the model tier accordingly and say which.
 
+## SCRIPT & ORDER PRE-FLIGHT — vet the script BEFORE any generation (non-negotiable)
+Generated clips are slow and expensive to redo, and you **cannot fix broken dialogue logic by re-cutting** — native audio bakes the words and delivery into each clip. So vet the script BEFORE building any Wyren graph. Take the dialogue + beats you received (the `storyboard-prompt` handoff, FLOW table, or the user's notes) and run this pass; if anything fails, rewrite the lines or reorder the beats NOW, then proceed.
+
+- **Dialogue-only read (coherence).** Read just the spoken lines top-to-bottom, ignoring visuals. They must read as ONE coherent conversation: one through-line, each line *answers or escalates* the one before it, no non-sequiturs (a question gets answered), no contradictions (a claim isn't undercut by the next line). This mirrors `storyboard-prompt`'s dialogue-only pass — run it again here, because the handoff can still arrive incoherent and you are the LAST gate before spend.
+- **Order check.** Confirm the beat order actually builds: hook first (the first clip carries the first-5s cold open), tension/escalation in the middle, payoff/punchline last. If a beat is out of place, reorder the SHOT LIST now (cheap) — never plan to "fix it in the edit" (impossible once clips are generated with baked-in audio).
+- **Say it out loud (natural-dialogue test).** Read each line the way a real person would speak it. Rewrite anything stiff, written, robotic, on-the-nose, or over-explained. Real talk uses contractions, fragments, interruptions, filler ("I mean", "honestly", "wait"), and reactions; people don't narrate the obvious or recite exposition. Keep each speaker's voice consistent and distinct from the others.
+- **Length vs duration budget.** Each line must fit its clip's seconds (~2–3 words/second; a 3s Kling shot ≈ 6–9 words). Trim lines that can't be said naturally in the beat's duration — rushed, crammed delivery reads as fake. If a beat truly needs more words, give it a longer clip or split it; never speed-talk to fit.
+- **Lock the cast.** Before writing any shot prompt, list EVERY speaking character by NAME with their one-line bible (from the handoff). You'll paste each into the shots where they appear so the model always knows who is who and who is speaking.
+
+Only after the script reads clean AND the order is right do you move to the model decision and graph build. If you changed any lines or the order, show the user the corrected shot list before spending.
+
 ## MODEL CAPABILITY MATRIX — decide in the FIRST intake round
 The question that always surfaces late — "shouldn't the storyboard be a reference image for the video model?" — must be answered up front, because the answer changes the whole graph. Reconfirm live with `list_models` + `get_model_capabilities`, but the load-bearing facts:
 
@@ -278,7 +289,22 @@ If a brand is included: use the supplied logo only if available, as a natural ph
 Generate native audio if supported; it should feel like real creator-shot social video. Use: natural room tone, phone-mic ambience, casual dialogue, natural VO if the storyboard calls for it, imperfect human delivery, tiny pauses, keyboard taps, chair squeaks, paper sounds, phone buzzes, footsteps, desk sounds, bag rustles, small reaction sounds, subtle whoosh/riser only when helpful, light music only if it supports pacing. Native to TikTok/Reels, not cinematic. Avoid: trailer/orchestral music, dramatic swells, glossy commercial music, overproduced sound design, fake epic SFX, booming risers, ad-like or perfect-studio VO. Dialogue casual, slightly imperfect, human. If the model can't generate clean dialogue, prioritize realistic visual storytelling and leave dialogue/captions for editing.
 
 ## SHOT-BY-SHOT EXECUTION
-Each panel is a BEAT — realize it as several short shots from different angles, not one held clip (see FAST CUTS). Per panel: preserve the main action, emotional beat, character placement when possible, important props, and environment; make it feel like real phone footage; make the action understandable without text; keep it short and purposeful; move the story forward quickly. Panel 1 = strongest scroll-stopping moment. Panel 7 = strongest visual payoff/climax. Panel 9 = punchline, loop, CTA, or memorable final image. Don't let the ending drag. If notes include dialogue, use it as guidance but make delivery sound natural. You may improve dialogue, timing, micro-actions, transitions, and audio as long as story order and visual anchor stay intact.
+Each panel is a BEAT — realize it as several short shots from different angles, not one held clip (see FAST CUTS). Per panel: preserve the main action, emotional beat, character placement when possible, important props, and environment; make it feel like real phone footage; make the action understandable without text; keep it short and purposeful; move the story forward quickly. Panel 1 = strongest scroll-stopping moment. Panel 7 = strongest visual payoff/climax. Panel 9 = punchline, loop, CTA, or memorable final image. Don't let the ending drag. Speak the EXACT lines from the vetted script (SCRIPT & ORDER PRE-FLIGHT) — any dialogue improvement happens THERE and gets re-vetted, not silently per shot, so the same words and order ship every time. You may still refine timing, micro-actions, transitions, and audio as long as the script, story order, and visual anchor stay intact.
+
+### PER-SHOT PROMPT ANATOMY (write every shot this explicitly)
+Vague shot prompts are why faces drift and dialogue lands flat. Every shot prompt — each entry in a multishot `multiPrompt`, AND each single clip — must spell out, in order:
+1. **WHO is in frame + WHO speaks.** Name the character ("Maya, the Navigator") and paste their verbatim bible (face / hair / age / build / wardrobe) so identity never drifts. If two people are in frame, name BOTH and say who is speaking vs listening.
+2. **The LINE, verbatim, in quotes** — the exact words from the vetted script: `says: "…"`. Silent beat → write `(no dialogue)`. Native audio speaks exactly what you write, so write the final words, never a paraphrase or a "talks about X" summary.
+3. **DELIVERY / EMOTION** — how it's said: tone + emotion + pace + any non-verbal (e.g. "deadpan, then a small smirk"; "rushed and anxious, glancing off-camera"; "warm, almost a whisper"; "laughs mid-sentence"). This is what makes the read sound human — NEVER omit it.
+4. **WHO they speak TO + blocking** — to camera, to the other character, or to themselves; where each person stands and faces.
+5. **ACTION** — the one clear physical action in the beat (typing, sliding a phone across the desk, leaning back).
+6. **FRAMING + CAMERA** — shot size, angle, movement (from the storyboard shot spec; vary it on every cut per FAST CUTS).
+7. **CONTINUITY LOCKS** — same setting / wardrobe / props / lighting as the surrounding shots; plus the UGC phone-realism tokens.
+
+**Template for one shot:**
+> [CHARACTER NAME + verbatim bible]. [Framing / angle / movement]. [Setting + continuity locks]. [Action]. Speaking [to whom], they say: "[exact line]" — delivery: [emotion / tone / pace + any non-verbal]. [Phone-realism tokens for UGC.]
+
+For a **multishot**, build the `multiPrompt` as one such block per shot, in order, each naming its speaker, exact line, and delivery — so the model keeps the right person saying the right line with the right emotion across every shot in the generation. (`multiPrompt` is a JSON STRING, not an array — see WYREN BUILD GOTCHAS.)
 
 ## SEGMENT-SPECIFIC INSTRUCTIONS
 - **FULL VIDEO:** all 9 panels in order; total at or below 15s if the model limit requires; compress beats but never remove the hook or payoff.
