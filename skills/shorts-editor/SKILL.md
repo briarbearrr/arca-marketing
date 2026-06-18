@@ -81,6 +81,12 @@ Neither signal alone works:
   zoom punch-ins, speed ramps / hold-frames, the word-pop captions themselves (gold keyword emphasis),
   hard cuts on the beat, and SFX hits. Only add a chip if the user explicitly asks for an on-screen
   label, and keep it minimal. The chip CSS/JS is removed from the default template.
+- **In-world / screen graphics are NOT an editor job — generate them upstream.** Anything that belongs ON a
+  surface in the scene (a laptop/phone screen's content, an in-scene poster, a product label, a "now loading"
+  promo) must be generated DIEGETICALLY inside the video clip by `video-prompt`, never composited here.
+  Pasted in the edit it floats in mid-air, covers faces, and looks fake — e.g. a "SYNERGIZE YOUR VIBES" card
+  meant for the laptop screen ends up hovering over the whole team. The editor only adds captions, the brand
+  splash / end card, and (rarely, if asked) a minimal face-safe chip — nothing that's supposed to live in the scene.
 - **Zoom punch-ins:** scale the plate wrapper (base ~1.04) to ~1.10-1.14 on emphasis lines, ease back. Never scale below 1.0 (reveals letterbox edges). Cover-fit the plate.
 - **SFX:** a curated set ships in `./sfx/` — use these first (no download needed). Keep dialogue front (SFX vol 0.25-0.35); every `<audio>` needs an `id`. **Never land a transition/whoosh SFX on a cut where a word ends** — it steps on the last word; put the hit on a silent beat or at the head of the next clip (this is why the silence-cut leaves ~0.1s pad after the last word, see Pipeline step 3). Mapping:
   | Role | File |
