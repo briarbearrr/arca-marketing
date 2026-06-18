@@ -14,7 +14,7 @@ Built on HyperFrames + ffmpeg + faster-whisper.
 ## Brand profile (read first)
 Read `../_arca-marketing-assets/brand.md` for the brand's colors, logo rules, and persona. The brand-splash end card
 uses `../_arca-marketing-assets/assets/final-cta.png`; the logo (`../_arca-marketing-assets/assets/logo.png`) may appear as a subtle
-in-world mark. `silence_cut.py` and `composition.template.html` are co-located in this skill folder.
+in-world mark. **Never place the logo in the TOP-RIGHT corner** — put the watermark bottom-left or bottom-right (subtle, small), and keep it out of the face and the platform UI safe zone. `silence_cut.py` and `composition.template.html` are co-located in this skill folder.
 This skill is the final edit stage after `video-prompt` (or runs standalone on any raw footage).
 
 ## Overview
@@ -165,6 +165,7 @@ The #1 overlay failure is text or a figure landing ON someone's face. "Captions 
 | Font silently falls back | Anton/Archivo etc. are NOT auto-embedded; download `.woff2` to `fonts/` + `@font-face` |
 | SFX silent in the render | every `<audio>` needs an `id` |
 | Captions or graphics land on a face | don't assume lower-third is safe — sample frames, find the face per scene, place overlays in a band that clears it (raise captions or push the plate up when the face sits low), verify on extracted frames before the high render (see FACE-SAFE PLACEMENT) |
+| Logo lands in the top-right | move the watermark to a bottom corner (subtle, small); never top-right (the template may default there — override it) |
 | Peaks clip (max 0.0 dBFS) | master the final with `loudnorm + alimiter` |
 | Can't preview alpha/cutout in ffmpeg | ffmpeg 4.x can't decode VP9-alpha; verify in Chrome (canvas getImageData) |
 
