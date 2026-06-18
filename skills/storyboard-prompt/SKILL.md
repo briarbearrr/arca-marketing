@@ -27,7 +27,7 @@ Ask for these inputs, then wait for answers. Make smart, briefly-stated assumpti
 3. **Target market / audience** — who it's for.
 4. **Brand profile** — `../_arca-marketing-assets/brand.md` (name, positioning, tone, persona, logo rules, colors).
 5. **Target format** — TikTok / Reels / Shorts.
-6. **Preferred length** — or let me recommend (default 20–30s unless the idea demands otherwise).
+6. **Preferred length** — **default 15–20s.** Go LONGER only if the user explicitly asks; never pad past 20s on your own. (Shorter is fine for a genuinely tiny idea, but 15–20s is the target.)
 
 Optional extra context to absorb if given: product/offer, audience pain point, desired emotion, must-include, must-avoid, tone, location, available props, actors/character types. Use the supplied logo if available.
 
@@ -123,8 +123,8 @@ Rewrite the concept into a stronger TikTok/Reels-ready version. Produce:
 6. Best opening visual
 7. Chosen hook
 8. Two backup hooks
-9. **Recommended length** — default 20–30s only if truly strongest; recommend shorter/longer if the idea demands
-10. **Retention map** — 0–1s scroll stop / 1–3s promise + clarity / 3–6s foreshadow or escalation / 6–15s proof, action, tension, or transformation / 15–25s payoff / final 1–2s loop, CTA, or punchline
+9. **Recommended length** — **default 15–20s**; go LONGER only if the user explicitly asked (never on your own). Recommend shorter only for a genuinely tiny idea.
+10. **Retention map** (scaled to the 15–20s default) — 0–1s scroll stop / 1–3s promise + clarity / 3–6s foreshadow or escalation / 6–14s proof, action, tension, or transformation / 14–18s payoff / final 1–2s loop, CTA, or punchline. Stretch proportionally only if the user asked for a longer video.
 11. Pacing recommendation
 12. Music / sound style
 13. **Dialogue + edit-caption strategy** — captions may be recommended for the final EDIT, but do NOT place overlay captions inside the storyboard image frames

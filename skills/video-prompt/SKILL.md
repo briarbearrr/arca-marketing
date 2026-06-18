@@ -17,7 +17,7 @@ Before generating, ask for any of these not already provided, then wait for answ
 3. **BRAND PROFILE** — attached/pasted `brand.md`.
 4. **TARGET MARKET / AUDIENCE.**
 5. **VIDEO SEGMENT** — FULL VIDEO / PART 1 / PART 2.
-6. **TARGET DURATION.**
+6. **TARGET DURATION** — default 15–20s; only exceed 20s if the user explicitly asks.
 7. **IMAGE MODEL + RESOLUTION** — which model cleans/upscales storyboard frames into start frames, at what size. Default: Nanobanana Pro at 2K.
 8. **VIDEO MODEL + RESOLUTION** — which model generates clips, at what resolution, which mode (std/pro). Default: Kling V3 at 720p.
 9. **ASPECT RATIO** — default 9:16 vertical.
@@ -105,7 +105,7 @@ Generate a finished vertical short-form video with:
 - Camera style: handheld smartphone footage (UGC)
 - Production level: low-cost, casual, creator-shot (UGC)
 - Audio: native dialogue, voice, room tone, foley, SFX, risers, music — only if supported by the model
-- Duration: [TARGET DURATION]
+- Duration: [TARGET DURATION — default 15–20s unless the user asked for longer]
 - Max per generation: model-dependent (typically 15s)
 
 If the full video exceeds the model's max single-clip duration, split into multiple generated clips.
@@ -185,7 +185,7 @@ If two characters recur, build a separate profile + bible for each, and keep bot
 - **Push extras out of focus.** Keep background people incidental, turned away, blurred, or cropped — never ask the model to hold a face it doesn't need to. An extra the viewer can't study can't visibly drift.
 
 ## DEFAULT SPLIT RULE
-If target duration is 20–30s: **Part 1 = Panels 1–5; Part 2 = Panels 6–9.** Each part feels like one continuous video. Part 2 continues the same character, wardrobe, props, lighting, setting, camera quality, and emotional energy — do not restart the story, do not recap. Never show the storyboard grid, panel numbers, production notes, borders, arrows, labels, or annotations. Convert panels into real-feeling vertical footage.
+**The default 15–20s video is usually ONE part** — a single Kling V3 multishot (up to 15s) plus a short final clip if needed. Only SPLIT into two parts when the user explicitly asked for a LONGER video (>~20s). When you do split: **Part 1 = Panels 1–5; Part 2 = Panels 6–9.** Each part feels like one continuous video. Part 2 continues the same character, wardrobe, props, lighting, setting, camera quality, and emotional energy — do not restart the story, do not recap. Never show the storyboard grid, panel numbers, production notes, borders, arrows, labels, or annotations. Convert panels into real-feeling vertical footage.
 
 ## INPUTS
 - Storyboard reference: [ATTACH 3×3 STORYBOARD IMAGE]
