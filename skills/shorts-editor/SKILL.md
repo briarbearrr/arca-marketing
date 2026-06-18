@@ -14,7 +14,7 @@ Built on HyperFrames + ffmpeg + faster-whisper.
 ## Brand profile (read first)
 Read `../_arca-marketing-assets/brand.md` for the brand's colors, logo rules, and persona. The brand-splash end card
 uses `../_arca-marketing-assets/assets/final-cta.png`; the logo (`../_arca-marketing-assets/assets/logo.png`) may appear as a subtle
-in-world mark. `silence_cut.py` and `composition.template.html` are co-located in this skill folder.
+in-world mark. **Never place the logo in the TOP-RIGHT corner** — put the watermark bottom-left or bottom-right (subtle, small), and keep it out of the face and the platform UI safe zone. `silence_cut.py` and `composition.template.html` are co-located in this skill folder.
 This skill is the final edit stage after `video-prompt` (or runs standalone on any raw footage).
 
 ## Overview
@@ -56,8 +56,8 @@ All paths below are inside the project dir: source from `clips/`, working files 
 
    **Mind the tail / SFX.** AI clips often land the FINAL WORD right at the out-point, so the ~0.1s pad after the last word matters, and **never land a transition SFX on a cut where a word ends** (it steps on the last word — see the SFX layer).
 4. **Re-transcribe the ASSEMBLED cut** (`edit/tight.mp4` — for raw footage OR an assembled AI-clip video), regroup into caption phrases (sentence-aware, 3-5 words). The silence-cut shifts every timestamp, so always re-transcribe and recompute **caption, zoom, SFX, and splash** timing from the NEW boundaries; never remap old times.
-5. **Build the composition** in `edit/composition/` from `./composition.template.html`: muted plate + separate dialogue audio + word-pop captions + zooms + logo + splash + SFX (no chips by default). Lint clean.
-6. **Draft render** (`--quality draft`) → `edit/frames/`, extract frames at every caption/splash beat, eyeball, fix. Then **`--quality high`** and **master** into `out/`:
+5. **Scan faces, then build the composition.** FIRST sample frames across the cut (`ffmpeg -i edit/tight.mp4 -vf fps=2 edit/faces/f_%03d.png`) and READ them to note which vertical band each scene's face(s) occupy (see FACE-SAFE PLACEMENT) — faces move between shots, so map them per scene. THEN build `edit/composition/` from `./composition.template.html` (muted plate + dialogue audio + word-pop captions + zooms + logo + splash + SFX, no chips by default), placing captions and EVERY graphic in a band that clears the detected faces. Lint clean.
+6. **Draft render + FACE-SAFE CHECK** (`--quality draft`) → `edit/frames/`: extract a frame at EVERY caption / chip / logo / splash beat, READ each one, and confirm NO caption, figure, logo, or graphic overlaps a face. If any does, move that element (or nudge the plate up via the cover-fit transform) and re-render — do NOT proceed to the high render until every overlay clears every face. Then **`--quality high`** and **master** into `out/`:
    `ffmpeg -i edit/raw.mp4 -c:v copy -af "loudnorm=I=-14:TP=-1.5,alimiter=limit=0.95" -c:a aac -b:a 192k out/<slug>-final.mp4`
 
 ## The silence-cut (the part that is easy to get wrong)
@@ -86,7 +86,6 @@ Neither signal alone works:
   | Hard cut / speaker change | `./sfx/swoosh-high.mp3`, `./sfx/swoosh-low.mp3` |
   | Chip entrance / key reveal (pop) | `./sfx/ding.mp3` |
   | Brand-splash signature hit (reserve for splash only) | `./sfx/tiktok-boom-bling.mp3` |
-  | Glitch / error beat | `./sfx/glitch.mp3` |
   | "Wrong"/mistake beat | `./sfx/wrong.mp3` |
   | Comedic deflation | `./sfx/sad-violin.mp3` |
   Need something not here? Mixkit free SFX (`mixkit.co/free-sound-effects/<cat>/` → `assets.mixkit.co/.../<id>-preview.mp3`) is a reliable no-key source.
@@ -103,7 +102,7 @@ Captions exist to (a) make the video legible sound-off, (b) hold retention with 
   (floating glass pills are the #1 "AI-looking" tell).
 - Captions are the **wording source of truth** — they carry the exact script even if native/synth audio
   drops a word.
-- Never cover the face — captions live in the lower third; any other graphic stays lower-mid or a top strip.
+- Never cover the face — DETECT where the face actually sits per scene and place captions/graphics in a band that clears it (see FACE-SAFE PLACEMENT). The lower-third default only holds when the face is high in frame; if the face sits low, raise the captions or push the plate up.
 - Derive timing from **word-level transcription of the FINAL cut** (re-transcribe after any cut, including
   the AI-clip silence-cut). The same re-transcription drives caption, zoom, SFX, and splash timing — recompute
   them all from the new boundaries. Never hand-guess or remap old times.
@@ -143,6 +142,18 @@ Keep sub-0.5s natural speech rhythm — don't machine-gun a separate caption ont
 cross-dissolves / cinematic fades · ❌ tiny text, thin weights, or a generic system font · ❌ everything
 (or nothing) highlighted · ❌ captions over the face or in the platform UI zone.
 
+## FACE-SAFE PLACEMENT (captions + every graphic must clear faces)
+The #1 overlay failure is text or a figure landing ON someone's face. "Captions live in the lower third" only holds when the face sits HIGH in frame — but talking-head / UGC framing varies wildly (desk-level POV, low or off-center framing, two people, a face near the bottom, or a subject reframed by a zoom punch-in). A blind lower-third caption then covers the face. So DETECT, don't assume:
+
+- **Find the face before placing anything.** Sample frames across each scene (`ffmpeg -i edit/tight.mp4 -vf fps=2 edit/faces/f_%03d.png`) and READ them to note which vertical band each scene's face(s) occupy. Faces MOVE between shots — map them per scene/segment, never once for the whole video.
+- **Place overlays in a band that clears the face**, keeping a margin of ≥8–10% of frame height around the face:
+  - Face high / centered (common case) → captions in the lower third (default baseline ~300px from bottom).
+  - Face LOW (in the lower third) → RAISE the captions to an upper band / top strip, OR push the plate up via the cover-fit / zoom transform so the face leaves the caption band. Never drop text onto a low face.
+  - Two faces, or a face off to one side → use the genuinely clear band (top strip, or the empty side); never straddle a face.
+- **Every inserted element obeys this — not just captions:** word-pop captions, any chip / label, the logo watermark, engagement figures / graphics, and the splash. Each keeps the same face margin AND stays out of the platform UI safe zone (bottom ~10%).
+- **If no band is safe** at a given moment (a face fills the frame), shrink or move the element, delay it to a face-clear beat, or drop it — covering the face is never acceptable.
+- **Verify on real frames, not by assumption** (Pipeline step 6): extract the frame at every overlay beat, look, and move anything touching a face before the high render. When the face moves into the caption band mid-segment, re-place the captions (or the plate) for that segment and re-derive timing.
+
 ## Gotchas
 | Symptom | Fix |
 | --- | --- |
@@ -153,11 +164,12 @@ cross-dissolves / cinematic fades · ❌ tiny text, thin weights, or a generic s
 | Two captions on screen at once | clamp hard-hide to `min(end+0.12, next.start-0.06)`, floor `inAt+0.2` (see Caption standard) |
 | Font silently falls back | Anton/Archivo etc. are NOT auto-embedded; download `.woff2` to `fonts/` + `@font-face` |
 | SFX silent in the render | every `<audio>` needs an `id` |
-| Graphics cover the face | keep overlays in the lower-mid band (or a top strip), never the center |
+| Captions or graphics land on a face | don't assume lower-third is safe — sample frames, find the face per scene, place overlays in a band that clears it (raise captions or push the plate up when the face sits low), verify on extracted frames before the high render (see FACE-SAFE PLACEMENT) |
+| Logo lands in the top-right | move the watermark to a bottom corner (subtle, small); never top-right (the template may default there — override it) |
 | Peaks clip (max 0.0 dBFS) | master the final with `loudnorm + alimiter` |
 | Can't preview alpha/cutout in ffmpeg | ffmpeg 4.x can't decode VP9-alpha; verify in Chrome (canvas getImageData) |
 
 ## Files
 - `./silence_cut.py` — silence ∪ word-gap cutter: `--src --audio --transcript --out [--cut-min 0.5]`.
 - `./composition.template.html` — HyperFrames composition skeleton (plate, word-pop captions, zooms, splash, SFX; chips removed from default) with the load-bearing GSAP logic already wired.
-- `./sfx/` — bundled, ready-to-use SFX (riser, swooshes, ding, tiktok-boom-bling, glitch, wrong, sad-violin). See the SFX mapping above.
+- `./sfx/` — bundled, ready-to-use SFX (riser, swooshes, ding, tiktok-boom-bling, wrong, sad-violin). See the SFX mapping above.
