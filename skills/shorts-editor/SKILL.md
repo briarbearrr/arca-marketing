@@ -59,6 +59,7 @@ All paths below are inside the project dir: source from `clips/`, working files 
 5. **Scan faces, then build the composition.** FIRST sample frames across the cut (`ffmpeg -i edit/tight.mp4 -vf fps=2 edit/faces/f_%03d.png`) and READ them to note which vertical band each scene's face(s) occupy (see FACE-SAFE PLACEMENT) — faces move between shots, so map them per scene. THEN build `edit/composition/` from `./composition.template.html` (muted plate + dialogue audio + word-pop captions + zooms + logo + splash + SFX, no chips by default), placing captions and EVERY graphic in a band that clears the detected faces. Lint clean.
 6. **Draft render + FACE-SAFE CHECK** (`--quality draft`) → `edit/frames/`: extract a frame at EVERY caption / chip / logo / splash beat, READ each one, and confirm NO caption, figure, logo, or graphic overlaps a face. If any does, move that element (or nudge the plate up via the cover-fit transform) and re-render — do NOT proceed to the high render until every overlay clears every face. Then **`--quality high`** and **master** into `out/`:
    `ffmpeg -i edit/raw.mp4 -c:v copy -af "loudnorm=I=-14:TP=-1.5,alimiter=limit=0.95" -c:a aac -b:a 192k out/<slug>-final.mp4`
+   Master in a SINGLE video encode and `-c:v copy` on the mux — re-encoding the video across multiple passes stacks compression artifacts. To trim a span out of a FINISHED master, **ripple-cut** (cut video + audio + baked captions together so they stay in sync) — valid only if NO caption is mid-display across the cut window.
 
 ## The silence-cut (the part that is easy to get wrong)
 **Run on BOTH raw recordings and assembled AI-clip videos** (see Pipeline step 3). Kling pads every generated clip with ~1–2s of dead air, so AI assemblies need this just as much as raw footage — for AI clips tune sensitive (`--cut-min 0.35`, noise floor `-36 dB`).
@@ -67,6 +68,8 @@ Neither signal alone works:
 - **whisper word timestamps** are imprecise around pauses and will report contiguous words across a real ~1s gap (e.g. it claimed "So, cheating" was continuous when 0.8s of silence sat between them).
 
 **Cut where EITHER is true:** acoustic silence (`silencedetect=noise=-33dB:d=0.35`) OR a transcript word-gap > 0.45s. Only remove the dead middle when it exceeds ~0.5s, leave ~0.1s of speech pad each side, and KEEP sub-0.5s gaps (natural rhythm — cutting every micro-gap machine-guns the edit and looks glitchy). Add a 10ms `afade` at each join to kill clicks. **Verify with silencedetect on the OUTPUT** — it should show only short breath gaps. `./silence_cut.py` implements all of this; tune `--cut-min`. **For AI-clip assemblies** (Kling et al.), the padding is quiet near-silent breath that `-33 dB` can miss — drop the noise floor to `-36 dB` and `--cut-min 0.35` to catch it.
+
+**Don't word-gap-cut a foley/VO/music format** (e.g. a trailer with no continuous dialogue). Word-gap detection assumes speech, so on speechless foley beats it reads the whole clip as a "gap" and guts it. For those formats, SKIP the word-gap cut: trim each Kling clip's head pad MANUALLY and time captions analytically (see Caption standard) instead.
 
 ## Layers (all face/caption-safe)
 - **Captions — word-by-word pop-on (the default):** each WORD pops in as it's spoken (Anton, UPPERCASE,
@@ -78,6 +81,12 @@ Neither signal alone works:
   zoom punch-ins, speed ramps / hold-frames, the word-pop captions themselves (gold keyword emphasis),
   hard cuts on the beat, and SFX hits. Only add a chip if the user explicitly asks for an on-screen
   label, and keep it minimal. The chip CSS/JS is removed from the default template.
+- **In-world / screen graphics are NOT an editor job — generate them upstream.** Anything that belongs ON a
+  surface in the scene (a laptop/phone screen's content, an in-scene poster, a product label, a "now loading"
+  promo) must be generated DIEGETICALLY inside the video clip by `video-prompt`, never composited here.
+  Pasted in the edit it floats in mid-air, covers faces, and looks fake — e.g. a "SYNERGIZE YOUR VIBES" card
+  meant for the laptop screen ends up hovering over the whole team. The editor only adds captions, the brand
+  splash / end card, and (rarely, if asked) a minimal face-safe chip — nothing that's supposed to live in the scene.
 - **Zoom punch-ins:** scale the plate wrapper (base ~1.04) to ~1.10-1.14 on emphasis lines, ease back. Never scale below 1.0 (reveals letterbox edges). Cover-fit the plate.
 - **SFX:** a curated set ships in `./sfx/` — use these first (no download needed). Keep dialogue front (SFX vol 0.25-0.35); every `<audio>` needs an `id`. **Never land a transition/whoosh SFX on a cut where a word ends** — it steps on the last word; put the hit on a silent beat or at the head of the next clip (this is why the silence-cut leaves ~0.1s pad after the last word, see Pipeline step 3). Mapping:
   | Role | File |
@@ -106,6 +115,9 @@ Captions exist to (a) make the video legible sound-off, (b) hold retention with 
 - Derive timing from **word-level transcription of the FINAL cut** (re-transcribe after any cut, including
   the AI-clip silence-cut). The same re-transcription drives caption, zoom, SFX, and splash timing — recompute
   them all from the new boundaries. Never hand-guess or remap old times.
+- **Noisy mixed audio (music + foley + VO): don't transcribe the MIX** — source timing per layer. Narrator
+  captions from the `voiceAI` word-alignment (plus the clip's offset); character / native lines by transcribing
+  the **native-audio-only cut** (a separate export with just the dialogue track), not the final mix.
 
 **Font / size / layout:** Anton (or a heavy grotesk like Archivo Black for premium brands), UPPERCASE by
 default (sentence case only for a strictly soft/premium voice), one caption font for the whole video,
@@ -167,6 +179,8 @@ The #1 overlay failure is text or a figure landing ON someone's face. "Captions 
 | Captions or graphics land on a face | don't assume lower-third is safe — sample frames, find the face per scene, place overlays in a band that clears it (raise captions or push the plate up when the face sits low), verify on extracted frames before the high render (see FACE-SAFE PLACEMENT) |
 | Logo lands in the top-right | move the watermark to a bottom corner (subtle, small); never top-right (the template may default there — override it) |
 | Peaks clip (max 0.0 dBFS) | master the final with `loudnorm + alimiter` |
+| HyperFrames duration looks off | its CLI duration summary misreports — trust `ffprobe` for true duration; the render also expects `index.html` in a project dir |
+| Is the dialogue audible over music? | you can't audition audio — checkpoint the mix / levels with the user before finalizing |
 | Can't preview alpha/cutout in ffmpeg | ffmpeg 4.x can't decode VP9-alpha; verify in Chrome (canvas getImageData) |
 
 ## Files
