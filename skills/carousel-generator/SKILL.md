@@ -105,6 +105,10 @@ Generate each slide as a separate standalone image. Do NOT generate all slides i
 ### GENERATE ONE SLIDE AT A TIME (hard rule + workflow)
 **Never render the slides together. One render = one slide.** No grid, no contact sheet, no 2×2 / 3×3 board, no "all slides in one image", no multi-panel composite, no brand board. A combined image is an instant fail — discard it and re-render as separate slides. (Asking an image model for "the whole carousel" reliably produces a cramped grid with unreadable text; one slide per render is the only way to get full-resolution, legible, mobile-ready slides.)
 
+**Image generation is NOT unavailable — a collage is a WORKFLOW bug, not a tool limit.** If you get a grid/board, never tell the user image generation is unsupported or disabled. The tool works; the prompt method was wrong. Fix the method and regenerate — never downgrade or abandon the deliverable over it.
+
+**The wording trap — these phrases make the model emit a collage:** "generate a batch", "the carousel", "the set", "five slides", "all slides", "a slide preview". To an image model, "a batch of slides" = "put all slides in one image." So never say them. Don't *batch* — **chain**: think of it as "generate the carousel as separate images, one image-generation call per slide, chained sequentially from Slide 1 to Slide N." One prompt = exactly one slide, always.
+
 **Render sequentially, anchoring every slide to Slide 1:**
 1. **Render Slide 1 first** as a single standalone 4:5 image. This locks the carousel's look — palette, type hierarchy, layout rhythm, safe margins, logo placement, illustration style. Review it; re-render until it's right BEFORE touching the rest (everything inherits from it).
 2. **Render Slides 2…N one at a time**, and feed the rendered Slide 1 back into the image tool as a **style reference** for each (optionally the immediately-previous slide too). Separate per-slide renders drift in style/palette/type unless every slide is anchored to Slide 1 — passing it as a reference is what makes independent renders read as one cohesive carousel.
@@ -187,7 +191,9 @@ When writing image-gen prompts, do not list every possible brand object — the 
 
 **Standard prompt structure (every slide):**
 
-> Create one standalone Instagram portrait carousel slide, 4:5 ratio, 1080 × 1350 px.
+> Create one standalone Instagram carousel slide only — this image contains ONLY Slide [N].
+> Do NOT create a collage, grid, contact sheet, multi-panel board, or slide preview.
+> Full-frame single 4:5 portrait image, 1080 × 1350 px.
 >
 > Primary goal: Make the message readable first. The design should support the headline, not overpower it.
 >
@@ -328,6 +334,6 @@ Check every slide:
 12. Did every image prompt end with the RENDER-ONLY enforcement line?
 13. **Hook test:** does Slide 1 open a curiosity loop that makes the swipe feel irresistible — not a generic "X tips" listicle or a self-contained statement that needs no swipe?
 14. **Swipe-momentum:** does every slide end with a reason to keep swiping (open loop / cliffhanger / progression), all the way to the CTA?
-15. **One-at-a-time render:** is each slide its own standalone image (no grid/board), rendered Slide 1 first with Slide 1 fed back as the style reference for the rest?
+15. **One-at-a-time render:** is each slide its own standalone image (no grid/board), rendered Slide 1 first with Slide 1 fed back as the style reference for the rest? Does every prompt explicitly block collage/grid/board and contain only one slide (no "batch / the carousel / the set / all slides" wording)? If a collage came out, was it discarded and regenerated — never shipped or "continued" — and never blamed on image-gen being unavailable?
 
 If any answer is no, fix before outputting — sharpen the hook, simplify the slide, or re-render. When unsure on visuals, remove the element — restraint always wins; when unsure on copy, make it more specific and open the loop wider.
