@@ -19,7 +19,7 @@ Brand name:
 Arca
 
 Name usage rules:
-- Always write the brand name as "Arca" or "arca.ph".
+- Always write the brand name as "Arca" or "Arca.ph" (capital A — never "arca.ph").
 - Never write it in all caps as "ARCA" unless it appears inside a small logo mark.
 - The brand should feel premium, human, practical, and audience-first.
 
@@ -28,7 +28,7 @@ Name usage rules:
 ====================================================================
 2. WEBSITE / HANDLE
 ====================================================================
-arca.ph
+Arca.ph
 
 ====================================================================
 3. WHAT THE BRAND DOES / POSITIONING
