@@ -88,12 +88,20 @@ Neither signal alone works:
   meant for the laptop screen ends up hovering over the whole team. The editor only adds captions, the brand
   splash / end card, and (rarely, if asked) a minimal face-safe chip — nothing that's supposed to live in the scene.
 - **Zoom punch-ins:** scale the plate wrapper (base ~1.04) to ~1.10-1.14 on emphasis lines, ease back. Never scale below 1.0 (reveals letterbox edges). Cover-fit the plate.
-- **SFX:** a curated set ships in `./sfx/` — use these first (no download needed). Keep dialogue front (SFX vol 0.25-0.35); every `<audio>` needs an `id`. **Never land a transition/whoosh SFX on a cut where a word ends** — it steps on the last word; put the hit on a silent beat or at the head of the next clip (this is why the silence-cut leaves ~0.1s pad after the last word, see Pipeline step 3). Mapping:
+- **SFX:** a curated set ships in `./sfx/` — use these first (no download needed). Keep dialogue front — **default SFX volume 0.12–0.22** (quieter than feels right; SFX should punctuate, not blare). Harsh / sharp sounds (buzzers, booms, risers) sit at the BOTTOM of that range or lower; only the brand-splash signature hit may go a touch louder. Every `<audio>` needs an `id`. **Never land a transition/whoosh SFX on a cut where a word ends** — it steps on the last word; put the hit on a silent beat or at the head of the next clip (this is why the silence-cut leaves ~0.1s pad after the last word, see Pipeline step 3). Mapping:
   | Role | File |
   | --- | --- |
   | Opening riser (first frame) | `./sfx/riser-high.mp3` |
   | Hard cut / speaker change | `./sfx/swoosh-high.mp3`, `./sfx/swoosh-low.mp3` |
   | Chip entrance / key reveal (pop) | `./sfx/ding.mp3` |
+  | Caption word / keyword pop | `./sfx/pop.mp3` |
+  | Subtle UI tick / select | `./sfx/click-soft.mp3` |
+  | Photo snapshot / freeze-frame beat | `./sfx/camera-shutter.mp3` |
+  | Light transition / scene change | `./sfx/transition-sweep.mp3` |
+  | Correct / affirm / success beat | `./sfx/correct.mp3` |
+  | Positive notification / reveal | `./sfx/notification.mp3` |
+  | Achievement / reward sparkle | `./sfx/bling.mp3` |
+  | Typing / on-screen text beat | `./sfx/keyboard.mp3` |
   | Brand-splash signature hit (reserve for splash only) | `./sfx/tiktok-boom-bling.mp3` |
   | "Wrong"/mistake beat | `./sfx/wrong.mp3` |
   | Comedic deflation | `./sfx/sad-violin.mp3` |
@@ -186,4 +194,4 @@ The #1 overlay failure is text or a figure landing ON someone's face. "Captions 
 ## Files
 - `./silence_cut.py` — silence ∪ word-gap cutter: `--src --audio --transcript --out [--cut-min 0.5]`.
 - `./composition.template.html` — HyperFrames composition skeleton (plate, word-pop captions, zooms, splash, SFX; chips removed from default) with the load-bearing GSAP logic already wired.
-- `./sfx/` — bundled, ready-to-use SFX (riser, swooshes, ding, tiktok-boom-bling, wrong, sad-violin). See the SFX mapping above.
+- `./sfx/` — bundled, ready-to-use SFX (riser, swooshes, ding, tiktok-boom-bling, wrong, sad-violin, pop, click-soft, camera-shutter, transition-sweep, correct, notification, bling, keyboard). See the SFX mapping above.
