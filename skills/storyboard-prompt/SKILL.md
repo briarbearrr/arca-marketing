@@ -1,6 +1,6 @@
 ---
 name: storyboard-prompt
-description: Use when pressure-testing a short-form video idea and turning it into a comprehensive PRODUCTION BOARD for TikTok / Reels / Shorts of any video type (UGC, cinematic, animation, etc.) — brutal virality scoring, a 10-route hook lab, a polish pass that makes the idea catchy and engaging with a strong hook and brand-aligned messaging, a first-5-seconds cold open, a clarification checkpoint before image generation, then TWO deliverables: (1) a single landscape PRODUCTION BOARD image with a shared-choices lock (cut count, palette, environment fingerprint), a Character Reference section (front/side/back turnaround + facial & side close-ups + costume detail + material/color swatches + notes), an Environment/Set Design section (hero set shot + labeled detail callouts + top-down floor plan with numbered camera/cut positions), a Storyboard strip of clean per-cut frames each annotated below with lens·duration·movement·shot-size, and a Lighting/Mood/Style-notes section — the skill refines the board prompt first, then asks for an explicit go-ahead and actually RENDERS the board via Wyren imageAI (Nanobanana Pro); and (2) a text breakdown (concept, named characters + 1-line bibles, a required 6-column Frame·Shot-spec·Time·Visual·Dialogue·Direction flow table with rich per-cut descriptions, editor notes, style notes) plus a compact copy-paste HANDOFF prompt for `video-prompt` (type, look lock, characters+bibles, how to use the board, per-cut shot list with dialogue + delivery). The board doubles as the reference image `video-prompt` uses to lock identity, set, and composition. Triggers on "storyboard this idea", "is this video concept good", "plan a short", "make a production board". Part of the arca-marketing-video kit.
+description: Use when pressure-testing a short-form video idea and turning it into a comprehensive PRODUCTION BOARD for TikTok / Reels / Shorts of any video type (UGC, cinematic, animation, etc.) — brutal virality scoring, a 10-route hook lab, a polish pass that makes the idea catchy and engaging with a strong hook and brand-aligned messaging, a first-5-seconds cold open, a clarification checkpoint before image generation, then TWO deliverables: (1) a single landscape PRODUCTION BOARD image with a shared-choices lock (cut count, palette, environment fingerprint), a Character Reference section (front/side/back turnaround + facial & side close-ups + costume detail + material/color swatches + notes), an Environment/Set Design section (hero set shot + labeled detail callouts + top-down floor plan with numbered camera/cut positions), a Storyboard strip of clean per-cut frames each annotated below with lens·duration·movement·shot-size, and a Lighting/Mood/Style-notes section — the skill refines the board prompt first, then asks for an explicit go-ahead and actually RENDERS the board via Wyren imageAI (Nanobanana Pro); and (2) a text breakdown (concept, named characters + 1-line bibles, a required 6-column Frame·Shot-spec·Time·Visual·Dialogue·Direction flow table with rich per-cut descriptions, editor notes, style notes) plus a compact copy-paste HANDOFF prompt for `video-prompt` (type, look lock, characters+bibles, how to use the board, per-cut shot list with dialogue + delivery). The board doubles as the reference image `video-prompt` uses to lock identity, set, and composition. When the video is a paid Meta ad (Facebook / Instagram / Reels / Stories), a paid-performance layer adds hook-rate/thruplay optimization, 3 text alternate hooks to test later (one generated ad by default), a proof beat, an explicit button-matched CTA, mandatory burned-in captions, placement safe zones, and Meta ad-policy-safe scriptwriting. Triggers on "storyboard this idea", "is this video concept good", "plan a short", "make a production board", "make a Meta/Facebook/Instagram ad". Part of the arca-marketing-video kit.
 ---
 
 # Storyboard Prompt
@@ -28,6 +28,7 @@ Ask for these inputs, then wait for answers. Make smart, briefly-stated assumpti
 4. **Brand profile** — `../_arca-marketing-assets/brand.md` (name, positioning, tone, persona, logo rules, colors).
 5. **Target format** — TikTok / Reels / Shorts.
 6. **Preferred length** — **default 15–20s.** Go LONGER only if the user explicitly asks; never pad past 20s on your own. (Shorter is fine for a genuinely tiny idea, but 15–20s is the target.)
+7. **Distribution** — organic post, or a **paid Meta ad** (Facebook / Instagram / Reels / Stories)? If paid, also get the **campaign objective** (awareness / traffic / leads / sales), **funnel stage** (cold prospecting vs warm retargeting), target **placements** (Reels/Stories vs Feed), and the **Meta CTA button** wording (Learn More / Sign Up / Shop Now…). A paid ad triggers the META BUSINESS ADS paid-performance layer below. Default to organic if the user doesn't say.
 
 Optional extra context to absorb if given: product/offer, audience pain point, desired emotion, must-include, must-avoid, tone, location, available props, actors/character types. Use the supplied logo if available.
 
@@ -111,7 +112,7 @@ Generate 10 hook routes:
 
 For each: hook line/visual, why it works, retention risk, how to make it more visual, whether it reads without sound, **stickiness** (catchy/sharp/quotable — a phrase the viewer could repeat), **brand fit** (does it ladder to brand positioning, audience, tone per `brand.md`).
 
-Then **score the hooks on three axes — scroll-stop power, stickiness, brand fit** — rank the top 3, and choose the single strongest (highest combined, never high scroll-stop but off-brand). The chosen hook must be: specific, visual, fast, emotionally clear, catchy/memorable (worth repeating, not just clear), on-brand (brand voice + message per `brand.md`, never generic), a true promise that sets up the brand's value (not a clever line going nowhere), easy to execute in the chosen type, not corporate, not over-explained, not dependent on perfect captions.
+Then **score the hooks on three axes — scroll-stop power, stickiness, brand fit** — rank the top 3, and choose the single strongest (highest combined, never high scroll-stop but off-brand). **If this is a paid Meta ad, also keep the top 3 as TEXT alternate hooks** to A/B test later (see the META BUSINESS ADS layer) — but still produce ONE generated ad by default; never render multiple. The chosen hook must be: specific, visual, fast, emotionally clear, catchy/memorable (worth repeating, not just clear), on-brand (brand voice + message per `brand.md`, never generic), a true promise that sets up the brand's value (not a clever line going nowhere), easy to execute in the chosen type, not corporate, not over-explained, not dependent on perfect captions.
 
 ## PHASE 4: POLISH THE IDEA
 Rewrite the concept into a stronger TikTok/Reels-ready version. Produce:
@@ -154,6 +155,48 @@ Rewrite the concept into a stronger TikTok/Reels-ready version. Produce:
 - If the concept is only "fine," sharpen the hook, raise the stakes, or make the line more quotable before moving on — do not storyboard a flat idea.
 
 The improved version should be: more specific, visual, emotionally charged, faster to understand, more human, more awkward/funny where appropriate, easier to film on a phone, less corporate, less ad-like, more native, more dependent on real reactions than perfect visuals, believable in one room / hallway / desk / office / home / cafe / car / street. Avoid: slow setup, generic establishing shots, greetings, logo-first openings, long explanations, too much text, weak endings, no emotional shift / tension / surprise, abstract hard-to-show concepts, scenes needing a crew, shots that look like AI key art or a brand commercial.
+
+## PHASE 4B: SCRIPT DEVICES — make the scene land
+A coherent through-line (Phase 4) is the floor, not the ceiling. A clear script people understand is not the same as a scene people watch to the end and quote. These reusable devices turn the first into the second — they apply to ANY format, not just skits. Pull in the ones that fit the concept; don't force all of them, but a flat scene usually needs at least the loop + a foil.
+
+- **Close the loop you open (hook-fear = payoff-relief).** The emotional question the hook raises must be the EXACT one the ending answers. If the hook is a fear ("we're getting fired because of the boss's new AI hire"), the payoff must resolve *that* fear ("you keep your job if you learn to use AI") — not a different point. Opening one loop and closing another is the most common reason a clear script still feels hollow; the viewer only feels the snap when the ending lands on the opening.
+- **End on a callback button.** The last line should call back to the hook's own words AND carry the CTA in-character — never as a corporate tag. ("Am I still getting fired?" → "Not if you learn to use AI like Maya.") A button is quotable, loops the video back to frame one, and states the offer without an ad voice.
+- **Withhold the reveal (curiosity gap).** Name the intriguing THING but hide what it actually is until a visual reveal. "The boss's new favorite hire" hits harder when you don't yet know the "hire" is an AI. Tease the noun, delay the picture — the gap is the retention.
+- **Make the point through a character who's confidently wrong.** Never have anyone state the brand lesson out loud. Give the wrong belief to a foil who states it with full confidence ("AI knows how to do everything, you just need to trust it more" — right after it deleted every company file). The audience draws the correct conclusion themselves: it's funnier, never preachy, and the brand's truth lands by contrast through the hero — not by being announced.
+- **Personify the abstract as a named character.** Turn the concept (or the threat) into a character with a NAME and a running visual gag — "Aiden," the AI new hire, shown as a laptop with a smiley-face sticky note. A named character with a recurring prop is dramatizable, quotable, and reusable across videos; an abstract concept ("AI tools") is none of those.
+- **Cast for conflict — a clear trio.** Most landing scenes run on three roles in tension: the **everyman** (whose stake we feel), the **foil** (confidently wrong — the comedy engine), and the **hero** (the brand's POV, who resolves it). Three roles in conflict carry a 15–20s scene with zero narration.
+- **Interview / mockumentary scaffold** (a reliable structure when unsure): a reporter with a handheld mic interviews each character, intercut with B-roll that dramatizes what they say. Each character gets a lower-third = name + a one-line joke descriptor ("Clueless, AI-loving boss" / "AI-trained Arca VA"). The format justifies fast talking-head cuts, reaction comedy, and on-the-nose characterization in three words — and gives the hook a natural "person answers a question" delivery. (Lower-third descriptor text is an EDIT overlay — note it for `shorts-editor`; never burn it into a storyboard frame, per Phase 7.)
+
+These are generative devices for Phases 3–5 (shaping the idea); the Phase 8B dialogue-only pass still gates the result for coherence.
+
+## META BUSINESS ADS — PAID-PERFORMANCE LAYER
+Apply this layer ONLY when the video is a paid Meta ad (confirmed in intake — Facebook / Instagram / Reels / Stories ads). It does NOT replace the engine above; it layers paid discipline on top of every phase. Organic videos skip it entirely. Paid traffic is colder, interruptive, and judged on hard numbers, so the bar shifts.
+
+**Optimize to the metrics that actually run the auction:**
+- **Hook rate** (3s plays ÷ impressions) → owned by the first 3s alone. A weak hook rate means the OPEN failed — fix the first frames, never the body.
+- **Hold rate / thruplay** (15s or ~95% plays) → owned by the body's retention beats and a payoff that pays off the hook.
+- **CTR / CPC** → owned by an unmistakable value prop + an explicit CTA matching the campaign's Meta CTA button.
+- **ROAS / CPA** → owned by offer clarity + audience-message match. A pretty ad that never names the offer will not convert cold traffic.
+
+**Creative testing is the biggest paid lever — but keep it cheap.** Default to **ONE generated ad** (one board, one video). Generating multiple full renders multiplies cost and is always the user's explicit call, never automatic. To enable A/B testing without that cost, write the **alternate hooks as TEXT only**: carry the Phase 3 hook lab's top 3 forward as 3 swappable opening lines / first-frame ideas against the same body, labeled as test cells in the handoff, so the user can later regenerate just the opening beat (cheap) if they want to test. Do NOT render multiple variants or extra thumbnails on your own.
+
+**Cold traffic needs the offer ON-SCREEN.** Organic can stay subtle; a cold paid ad cannot. Make the value prop unmistakable by ~the halfway mark, show the brand/product (don't just imply it) before the CTA, and keep one **proof / credibility beat** — a result, a number, a testimonial-style line, or a recognizable outcome — because cold viewers need a reason to believe.
+
+**Explicit, button-matched CTA.** End on a direct CTA that mirrors the objective and the Meta CTA button wording ("tap Learn More to ___"), not a vague soft line. Keep it in brand voice and ideally a callback button (Phase 4B), but for paid it must be unambiguous.
+
+**Captions are mandatory and burned in.** ~80%+ of feed plays are muted, so for paid the on-screen captions are non-negotiable (not "optional"), high-contrast, and inside the safe zone. State this explicitly in VIDEO EDITOR NOTES.
+
+**Placement safe zones — keep critical content center-safe.** Reels/Stories UI covers roughly the **top ~14%** and **bottom ~20%** of a 9:16 frame; Feed crops to 4:5 / 1:1. Keep faces, key action, captions, logo, and the CTA out of those edges and centered, so ONE master survives every placement. Design the master at 9:16 (or 4:5 for feed-priority) with a center-safe core; note target placements from intake.
+
+**Ad-policy-safe scriptwriting (or the ad gets rejected / throttled).** While writing the lines, avoid:
+- **Personal-attribute callouts** — never imply the viewer HAS a trait/condition ("Are you struggling with debt?", "Tired of being broke?"). Reframe general / third-person ("Most founders waste hours on ___").
+- **Unrealistic or guaranteed outcomes** ("$10k in a week", "guaranteed results"), sensational claims, and misleading before/after.
+- **Sound-on-only gags** — the hook and joke must survive muted.
+The Phase 4B confident-wrong foil still works, but the foil's wrong belief must not become a claim about the viewer or a guaranteed result.
+
+**Funnel stage shifts the creative** (from intake): **cold / prospecting** → stronger pattern-interrupt hook, problem-first, offer + proof, ~15s; **warm / retargeting** → more direct, lead with the offer / an objection-handle / a testimonial, may run longer.
+
+When this layer is active, say so once, and fold its requirements into the hook lab (3 text alternate hooks), the structure (proof beat + explicit CTA), and the editor notes (burned-in captions + safe zones). Still produce ONE generated ad by default.
 
 ## PHASE 5: 9-BEAT SHORT-FORM STRUCTURE
 Build a 9-shot structure for the improved idea; each shot = one storyboard panel. The first-5s cold open lands across panels 1–2 (sometimes 3): panel 1 = pattern interrupt + promise for the declared type, panel 2 = the 3–5s escalation beat. Don't spend panels 1–2 on setup, logos, or greetings.
@@ -293,7 +336,7 @@ After the storyboard, write 2 practical social captions for the target audience.
 1. Research or platform heuristics
 2. Brutally honest virality evaluation
 3. Hook lab
-4. Improved concept
+4. Improved concept (incl. Phase 4B script devices — close the loop, callback button, confident-wrong foil, personify the concept as a named character, cast a conflict trio). If a paid Meta ad: apply the META BUSINESS ADS layer (one generated ad by default; 3 text alternate hooks to test later, proof beat, explicit button-matched CTA, burned-in captions, placement safe zones, ad-policy-safe lines).
 5. 9-beat shot structure
 6. Quality gate summary (type-appropriate)
 7. Clarification checkpoint — confirm DIRECTION and ask any open questions (skip with one line if already clear and approved)
