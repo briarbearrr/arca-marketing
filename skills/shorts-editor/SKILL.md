@@ -57,7 +57,7 @@ All paths below are inside the project dir: source from `clips/`, working files 
    **Mind the tail / SFX.** AI clips often land the FINAL WORD right at the out-point, so the ~0.1s pad after the last word matters, and **never land a transition SFX on a cut where a word ends** (it steps on the last word — see the SFX layer).
 4. **Re-transcribe the ASSEMBLED cut** (`edit/tight.mp4` — for raw footage OR an assembled AI-clip video), regroup into caption phrases (sentence-aware, 3-5 words). The silence-cut shifts every timestamp, so always re-transcribe and recompute **caption, zoom, SFX, and splash** timing from the NEW boundaries; never remap old times.
 5. **Scan faces, then build the composition.** FIRST sample frames across the cut (`ffmpeg -i edit/tight.mp4 -vf fps=2 edit/faces/f_%03d.png`) and READ them to note which vertical band each scene's face(s) occupy (see FACE-SAFE PLACEMENT) — faces move between shots, so map them per scene. THEN build `edit/composition/` from `./composition.template.html` (muted plate + dialogue audio + word-pop captions + zooms + logo + splash + SFX, no chips by default), placing captions and EVERY graphic in a band that clears the detected faces. Lint clean.
-6. **Draft render + FACE-SAFE CHECK** (`--quality draft`) → `edit/frames/`: extract a frame at EVERY caption / chip / logo / splash beat, READ each one, and confirm NO caption, figure, logo, or graphic overlaps a face. If any does, move that element (or nudge the plate up via the cover-fit transform) and re-render — do NOT proceed to the high render until every overlay clears every face. Then **`--quality high`** and **master** into `out/`:
+6. **Draft render + FACE-SAFE & SAFE-AREA CHECK** (`--quality draft`) → `edit/frames/`: extract a frame at EVERY caption / chip / logo / splash beat, READ each one, and confirm NO caption, figure, logo, or graphic (a) overlaps a face OR (b) crosses the platform safe margins — nothing under the right action rail (~120–150px), the bottom UI (~300–340px), or the top (~120px); the widest punch caption is the usual offender. If any does, move/shrink that element (or nudge the plate up via the cover-fit transform) and re-render — do NOT proceed to the high render until every overlay clears every face AND sits inside the safe area. Then **`--quality high`** and **master** into `out/`:
    `ffmpeg -i edit/raw.mp4 -c:v copy -af "loudnorm=I=-14:TP=-1.5,alimiter=limit=0.95" -c:a aac -b:a 192k out/<slug>-final.mp4`
    Master in a SINGLE video encode and `-c:v copy` on the mux — re-encoding the video across multiple passes stacks compression artifacts. To trim a span out of a FINISHED master, **ripple-cut** (cut video + audio + baked captions together so they stay in sync) — valid only if NO caption is mid-display across the cut window.
 
@@ -130,13 +130,23 @@ Captions exist to (a) make the video legible sound-off, (b) hold retention with 
 **Font / size / layout:** Anton (or a heavy grotesk like Archivo Black for premium brands), UPPERCASE by
 default (sentence case only for a strictly soft/premium voice), one caption font for the whole video,
 embedded (`fonts/` woff2 — source `https://cdn.jsdelivr.net/npm/@fontsource/<font>/files/<font>-latin-400-normal.woff2`).
-Body ~84–96px on 1080×1920 (~4.5–5% of height); punch/punchline group ~160–190px (`.cap.big`). Centered,
-baseline ~300px from bottom (clear of the platform UI safe zone), max width ~960px, ≥60px side margins,
-max 2 lines / 3–5 words per group (wrap past 2 lines → split into another group).
+Body ~62–72px on 1080×1920 (~3.3–3.8% of height; default 66px — readable, NOT oversized); punch/punchline
+group ~115–130px (`.cap.big`, default 120px). Keep these sizes restrained — captions that fill the frame
+read amateur and overflow the safe area. Centered, baseline ~340px from bottom, **max width ~840px with
+≥90px side padding**, `overflow-wrap:break-word`, max 2 lines / 3–5 words per group (wrap past 2 lines →
+split into another group).
+
+**SAFE AREA (TikTok / IG Reels / Shorts) — captions must stay inside it.** The platform UI eats the edges:
+bottom ~300–340px (caption, username, nav), the RIGHT action rail ~120–150px (like/comment/share), and the
+top ~120px. Keep every caption (and the punch group, which is widest) within the **central ~840px column**
+and **above ~330px from the bottom** so nothing slides under the rail or the bottom chrome. A single long
+word at `.cap.big` size is the usual offender — it can't wrap, so it spills off-frame; if a punch word is
+very long, drop that group out of `.big` or shorten it. Verify in the FACE-SAFE draft-frame check (Phase 6):
+confirm no caption crosses the side/bottom safe margins, not just that it clears faces.
 
 **Color / contrast (from brand profile):** base words white (`--ink`); keyword highlight = the brand
 HIGHLIGHT color (`--hl`; Arca Sun Yellow `#FED21A`); reserve a second brand color for special emphasis
-only. Legibility (replaces any pill): `-webkit-text-stroke: 2.5–3px rgba(3,8,14,.6)` + `text-shadow: 0 5px
+only. Legibility (replaces any pill): `-webkit-text-stroke: ~2–2.5px rgba(3,8,14,.6)` (scale with font size — lighter on the smaller body) + `text-shadow: 0 5px
 20px rgba(0,0,0,.7), 0 2px 4px rgba(0,0,0,.9)`. Soften the keyword stroke (dark-amber) so the gold doesn't muddy.
 
 **Grouping / data shape:** 3–5 words per group, sentence-aware (don't split mid-clause). Each group =

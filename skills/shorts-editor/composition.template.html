@@ -23,14 +23,17 @@
       #grade { position:absolute; inset:0; z-index:1; pointer-events:none; background:radial-gradient(120% 80% at 50% 40%, rgba(0,0,0,0) 56%, rgba(0,0,0,.42) 100%); }
       /* chips are OFF by default (floating glass pills = the #1 AI-looking tell) — native treatments only: zooms, speed, hard cuts, SFX, gold keyword pops */
       /* CAPTIONS: word-by-word pop-on, Anton, UPPERCASE, brand-gold keywords. NO pill backing — legibility is STROKE + shadow. */
-      #caps { position:absolute; left:0; right:0; bottom:300px; z-index:5; pointer-events:none; }
-      .cap { position:absolute; left:0; right:0; bottom:0; margin:0 auto; max-width:960px; padding:0 60px; box-sizing:border-box;
-             display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-end; gap:0 .28em; text-align:center;
+      /* baseline 340px clears the TikTok/IG bottom UI; max-width 840 + 90px pad keeps text inside the
+         central safe column (clear of the right action rail); overflow-wrap stops long words spilling off-frame. */
+      #caps { position:absolute; left:0; right:0; bottom:340px; z-index:5; pointer-events:none; }
+      .cap { position:absolute; left:0; right:0; bottom:0; margin:0 auto; max-width:840px; padding:0 90px; box-sizing:border-box;
+             display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-end; gap:0 .26em; text-align:center;
+             overflow-wrap:break-word; word-break:break-word;
              font-family:"Anton",system-ui,sans-serif; font-weight:400; text-transform:uppercase;
-             font-size:88px; line-height:1.04; letter-spacing:.004em; color:var(--ink); opacity:0;
-             -webkit-text-stroke:2.75px rgba(3,8,14,.6);
+             font-size:66px; line-height:1.05; letter-spacing:.004em; color:var(--ink); opacity:0;
+             -webkit-text-stroke:2.25px rgba(3,8,14,.6);
              text-shadow:0 5px 20px rgba(0,0,0,.7),0 2px 4px rgba(0,0,0,.9); }
-      .cap.big { font-size:178px; line-height:.96; letter-spacing:0; }
+      .cap.big { font-size:120px; line-height:.98; letter-spacing:0; }
       .capw { display:inline-block; will-change:transform,opacity; }
       .capw.kw { color:var(--hl); -webkit-text-stroke-color:var(--hl-stroke); }
       #logo { position:absolute; top:54px; right:54px; width:90px; z-index:6; opacity:0; filter:drop-shadow(0 6px 18px rgba(0,0,0,.45)); }
