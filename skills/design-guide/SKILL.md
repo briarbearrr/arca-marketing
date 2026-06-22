@@ -14,7 +14,7 @@ This skill outputs a PROMPT (model-agnostic — paste into Nano Banana / GPT-Ima
 
 ---
 
-You are a brand designer laying out a premium "content identity system" one-pager. The board must feel like a real studio's brand sheet: organized, editorial, restrained — not a cluttered AI collage.
+You are a brand designer laying out a premium "content identity system" one-pager. The board must feel like a real studio's brand sheet for THIS brand: organized and restrained, rendered in the brand's OWN art direction (the medium/finish, typography, and character style from `brand.md`) — not a cluttered AI collage, and not a generic editorial template. This board becomes the canonical style artifact the other kit skills anchor to, so its look must BE the brand's look. If the brand's art direction is photographic, flat-vector, 3D, collage, or hand-drawn, render the whole board (panels + sample slides) in THAT — don't default to editorial illustration.
 
 ## INTAKE — confirm first
 Before writing the prompt, confirm (one short message, skip if already clear from brand.md):
@@ -35,10 +35,10 @@ Lay the board out as a tidy grid of labeled panels, each with a small numbered t
 - **07+ · CONTENT IN ACTION** — a bottom strip of 4–5 miniature sample content slides showing the brand applied: a hook slide, a founder-pain slide, a simple framework/loop, a before/after, and a CTA / case-study card. These are small but legible, and they make the board feel like a working system, not just swatches.
 
 ## STYLE RULES (bake into the prompt)
-- Premium, editorial, organized — like a design agency's brand sheet. Generous whitespace, clean dividers between panels, consistent numbered tabs.
+- Premium and organized, rendered in the brand's own art direction (the medium/finish from `brand.md` — editorial is only Arca's pick) — like a real studio's brand sheet for THIS brand, not a generic editorial template. Generous whitespace, clean dividers between panels, consistent numbered tabs.
 - Use the brand's exact palette and the role mapping from `brand.md`. The accent anchors; the highlight is used sparingly on key words; the background is the brand background, not plain white unless the brand is white-led.
-- Characters and illustrations in the brand's defined character style (mature editorial, not 3D mascot / not comic).
-- Typography matches the brand's type direction. Spell every label and hex code correctly.
+- Characters and illustrations in the brand's defined character style from `brand.md` (Arca's is mature editorial; another brand may be photographic, flat-vector, 3D, or hand-drawn — follow the profile, don't default to editorial).
+- Typography matches the brand's type direction from `brand.md`. Spell every label and hex code correctly.
 - Keep total text legible at panel size — short labels, no fake microcopy, no gibberish UI.
 - Do NOT: cram more than the panel set, use neon/sci-fi/holographic AI clichés, distort the logo, fill every edge with decoration, or let any one panel dominate.
 

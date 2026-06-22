@@ -18,10 +18,18 @@ Before writing anything, ask the user and wait for answers:
 
 If something is left blank, make smart assumptions and state them briefly. Don't stall unless the topic is impossible to understand.
 
+**CLICHÉ-TOPIC GATE.** Some angles are so overused they read as stock content — above all **"AI won't replace you / AI vs humans / AI is coming for your job."** If the user's topic IS such a cliché and they did NOT explicitly ask for it, STOP before writing and ask whether they want to proceed with that well-worn angle or take a fresher one — only continue with the cliché if they explicitly confirm. Flag the same way: "X tips for Y" listicles, "work smarter not harder," "the future is here," "this changes everything."
+
 ## Tone
 Make the carousel feel like it understands real audience pain: sharp, practical, audience-aware, credible, direct, modern, human. No hype, no fluffy motivation, no generic "AI will change everything" language, no cringe bro-marketing.
 
 ---
+
+## ANCHOR TO THE DESIGN BOARD (the brand's look comes from here, not from this skill)
+The brand's rendered design board (`../_arca-marketing-assets/assets/design-guide.png`) is the PRIMARY style source. Different brands have different boards and `brand.md` art directions, so their carousels must look DIFFERENT — if every carousel comes out the same, this rule is being skipped.
+- **Feed the design board into the image tool as a style reference when rendering Slide 1**, and derive the palette, typography, illustration **medium & finish**, character style, and texture FROM it + `brand.md`'s ART DIRECTION block. (Wyren `imageAI`: wire `design-guide.png` in as a reference image on the Slide-1 node.)
+- **Do NOT impose a default look.** This skill must never assume "premium editorial illustration / SaaS typography" — that is only Arca's art direction. A photographic, flat-vector, 3D, collage, or hand-drawn brand renders in THAT. Wherever a render instruction below names a specific style, treat it as the Arca EXAMPLE and substitute the brand's own art direction.
+- The STRUCTURE rules below (element budget, one-anchor, one-slide-at-a-time, hooks, swipe momentum, readability) ARE brand-agnostic and always apply — only the visual STYLE is brand-derived.
 
 ## MASTER DESIGN PRIORITY
 Content first. Brand world second. Decoration last. The design must support the content, not compete with it.
@@ -56,15 +64,15 @@ For each slide, the visual answers one question: "What is the one thing this sli
 ## VISUAL IDENTITY DIRECTION
 Do NOT make a plain white corporate carousel, futuristic, comic-book, childish, or 3D-AI-mascot look. Do NOT put slide section titles ("CTA," "Problem," "Hook," "Framework") inside the image unless requested. Keep branding subtle — never overuse the logo or name mark.
 
-Design should feel: premium, calm, editorial, practical, audience-facing, warm but sharp, recognizable without being busy.
+Design should feel: premium, practical, audience-facing, recognizable without being busy — in the brand's OWN art direction (from `brand.md` + the design board). "Calm editorial" is Arca's feel, not a kit default; match whatever the brand's board establishes.
 
 ## VISUAL WORLD
 Use the brand's visual world (from the profile) with restraint; do not invent a different system. Do not use all motifs at once. Per slide choose only: 1 primary visual metaphor + 1–2 supporting brand details. Hard limit: max 2 supporting motifs per slide. If the slide already has a detailed scene, use only 1; if it uses a character, reduce supporting objects further.
 
 ## CHARACTER DIRECTION
-Characters are allowed but must feel mature, grounded, editorial — part of the brand world, not cartoon mascots.
+Characters render in the brand's OWN character style (from `brand.md` + the design board) — the description below is Arca's mature-editorial example; a photographic, 3D, flat-vector, or playful brand follows its own style instead. Whatever the style, keep characters part of the brand world, not random cartoon mascots, and avoid speech bubbles unless very minimal.
 
-Style: mature 2D editorial illustration; adult proportions; confident, calm expressions; subtle shading; clean modern shapes; realistic grounded energy. No exaggerated faces, no comic-panel style, no 3D toy texture, no Pixar-like proportions, no childish mascot energy, no speech bubbles (unless very minimal).
+Arca example style: mature 2D editorial illustration; adult proportions; confident, calm expressions; subtle shading; clean modern shapes; realistic grounded energy — no exaggerated faces, no comic-panel style, no 3D toy texture, no childish mascot energy. (Drop these specific bans for a brand whose art direction IS 3D or playful.)
 
 - Main persona: use the brand's persona if defined; follow the profile's look/feel/dress. Keep any logo patch subtle. Avoid costume clichés and exaggerated props.
 - Supporting characters: mature editorial illustrations of the profile's supporting cast, feeling like real professionals.
@@ -82,9 +90,9 @@ Use the brand's colors consistently, mapped to the profile's roles (background /
 - RESTRAINT: one dominant background color per slide; one highlight-color emphasis treatment per slide. Do not stack competing gradients, highlights, outlines, icons, and underlines at once.
 
 ## TYPOGRAPHY
-Clean modern sans-serif consistent with the brand website (see profile). Typography is the hero of most slides: modern, audience-facing, highly readable.
+Typography follows the brand's type direction (from `brand.md` + the design board). Typography is the hero of most slides: audience-facing and highly readable, whatever the brand's typeface family.
 
-Style: clean SaaS-style sans-serif; strong bold headlines; medium-weight subheads; readable body. Avoid overly condensed/block fonts (comic-poster feel), distressed/grungy/decorative type, childish rounded fonts, futuristic techno fonts, and all-caps as the default.
+Style: use the brand's own type direction (Arca's is clean SaaS-style sans-serif — a different brand may be a serif, a grotesk, a display face, etc.); strong bold headlines; medium-weight subheads; readable body. Avoid type that fights readability at mobile size — but don't force a SaaS sans-serif onto a brand whose type direction is different.
 
 Brand rules: write the brand name per the profile's name-usage rules. Sentence case for most headlines; all-caps only for small labels/tiny navigation-style badges. One emphasis treatment per slide (highlight underline, highlight marker block, accent keyword, OR boxed callout) — never stack styles. Keep the headline visually dominant and supporting copy short and secondary; never let illustration compete with headline readability.
 
@@ -110,11 +118,11 @@ Generate each slide as a separate standalone image. Do NOT generate all slides i
 **The wording trap — these phrases make the model emit a collage:** "generate a batch", "the carousel", "the set", "five slides", "all slides", "a slide preview". To an image model, "a batch of slides" = "put all slides in one image." So never say them. Don't *batch* — **chain**: think of it as "generate the carousel as separate images, one image-generation call per slide, chained sequentially from Slide 1 to Slide N." **1 prompt = 1 image** = exactly one slide, always — repeat across N prompts to get N images.
 
 **Render sequentially, anchoring every slide to Slide 1:**
-1. **Render Slide 1 first** as a single standalone 4:5 image. This locks the carousel's look — palette, type hierarchy, layout rhythm, safe margins, logo placement, illustration style. Review it; re-render until it's right BEFORE touching the rest (everything inherits from it).
+1. **Render Slide 1 first** as a single standalone 4:5 image, **feeding the design board (`design-guide.png`) in as a style reference** so it inherits the BRAND's actual look (medium/finish, palette, type, character style — per ANCHOR TO THE DESIGN BOARD). This Slide 1 locks the carousel's look — palette, type hierarchy, layout rhythm, safe margins, logo placement, render style. Review it; re-render until it's right and on-brand BEFORE touching the rest (everything inherits from it).
 2. **Render Slides 2…N one at a time**, and feed the rendered Slide 1 back into the image tool as a **style reference** for each (optionally the immediately-previous slide too). Separate per-slide renders drift in style/palette/type unless every slide is anchored to Slide 1 — passing it as a reference is what makes independent renders read as one cohesive carousel.
 3. **Review each slide before rendering the next.** If a slide drifts in style, breaks the ELEMENT BUDGET, or its text renders badly, fix and re-render THAT slide before moving on — don't batch-fix at the end.
 
-*Tool note (if rendering via Wyren `imageAI`): one `imageAI` node/call per slide, with Slide 1's output wired in as a reference image for slides 2…N. Never one node asked to produce all slides. Validate the cheap image tier before spending — load the `wyren` skill first.*
+*Tool note (if rendering via Wyren `imageAI`): one `imageAI` node/call per slide. Wire `design-guide.png` in as a reference image on the Slide-1 node (the brand style anchor), then wire Slide 1's output in as a reference image for slides 2…N. Never one node asked to produce all slides. Validate the cheap image tier before spending — load the `wyren` skill first.*
 
 Continuity SHOULD come from: anchoring every slide to Slide 1's rendered look, consistent type hierarchy, consistent palette, recurring background texture, consistent safe margins, restrained highlight emphasis, and 1 recurring object/motif repeated across slides. Each slide visually distinct but clearly part of the same carousel.
 Continuity should NOT come from: rendering them together, repeating every object, the same busy brand-world scene everywhere, forcing the logo into every large visual moment, or packing every slide with the full brand system.
@@ -207,9 +215,9 @@ When writing image-gen prompts, do not list every possible brand object — the 
 >
 > Allowed brand details: Use only [1–2 specific brand elements from the BRAND PROFILE].
 >
-> Style: Premium mature 2D editorial illustration, clean modern SaaS-style typography, [brand background] background, [brand accent] accents, [brand body-text color] text, restrained [brand highlight] highlight. (Pull these colors from the BRAND PROFILE.)
+> Style: [the brand's art direction — illustration medium & finish + typography feel — from the design board image + BRAND PROFILE; do NOT default to "editorial / SaaS" unless that IS the brand], [brand background] background, [brand accent] accents, [brand body-text color] text, restrained [brand highlight] highlight. Match the rendered design board's look. (Pull the style + colors from the design board image + BRAND PROFILE.)
 >
-> Do not include: busy background, multiple scenes, dense desk clutter, many sticky notes, tiny labels, fake UI text, many icons, many documents, detailed dashboards, excessive brand-world motifs, oversized scenic elements, comic-book styling, sci-fi AI visuals, robots, 3D toy style, childish characters, or obvious/heavy-handed branding. Also do NOT include: speech bubbles or thought bubbles, more than one floating UI card, charts / performance reports / multi-row checklists (unless that single card is the anchor), dashed route lines across the slide, scattered map pins, sparkles or twinkles, sun-burst rays behind text, paper airplanes, confetti, or cartoon/mascot faces.
+> Do not include: busy background, multiple scenes, dense desk clutter, many sticky notes, tiny labels, fake UI text, many icons, many documents, detailed dashboards, excessive brand-world motifs, oversized scenic elements, or obvious/heavy-handed branding. (Block specific looks — comic-book, sci-fi AI, robots, 3D toy, childish — only when they clash with the brand's own art direction; a 3D or playful brand keeps its style.) Also do NOT include: speech bubbles or thought bubbles, more than one floating UI card, charts / performance reports / multi-row checklists (unless that single card is the anchor), dashed route lines across the slide, scattered map pins, sparkles or twinkles, sun-burst rays behind text, paper airplanes, confetti, or cartoon/mascot faces.
 
 Composition constraint: one main visual anchor only; no extra props/labels/background details beyond what's requested; generous negative space; headline stays dominant; premium and restrained, not busy or poster-like. Keep all text clean, correctly spelled, readable at mobile size.
 
@@ -232,9 +240,9 @@ Composition constraint: one main visual anchor only; no extra props/labels/backg
 >
 > Allowed brand details: Use only two brand visual details from the BRAND PROFILE: [choose two supporting motifs or recurring objects, plus a highlight-color underline if needed].
 >
-> Style: Premium mature 2D editorial illustration, clean modern SaaS-style typography, [brand background] background, [brand accent] accents, [brand body-text color] text, restrained [brand highlight] highlight. (Pull these colors from the BRAND PROFILE.)
+> Style: [the brand's art direction — illustration medium & finish + typography feel — from the design board image + BRAND PROFILE; do NOT default to "editorial / SaaS" unless that IS the brand], [brand background] background, [brand accent] accents, [brand body-text color] text, restrained [brand highlight] highlight. Match the rendered design board's look. (Pull the style + colors from the design board image + BRAND PROFILE.)
 >
-> Do not include: a full cluttered desk, many sticky notes, many labeled papers, detailed paperwork, comparison tables, dense dashboards, many icons, multiple task stacks, large scenic background, excessive scene illustration, comic-book style, robots, sci-fi AI visuals, speech/thought bubbles, multiple floating UI cards, charts or multi-row checklists, dashed route lines, scattered pins, sparkles, sun-burst rays, paper airplanes, or obvious/heavy-handed branding.
+> Do not include: a full cluttered desk, many sticky notes, many labeled papers, detailed paperwork, comparison tables, dense dashboards, many icons, multiple task stacks, large scenic background, excessive scene illustration, speech/thought bubbles, multiple floating UI cards, charts or multi-row checklists, dashed route lines, scattered pins, sparkles, sun-burst rays, paper airplanes, or obvious/heavy-handed branding. (Block specific looks — comic-book, sci-fi AI, robots — only when they clash with the brand's own art direction.)
 >
 > Keep the slide calm, readable, focused. The audience should understand the problem in under 3 seconds.
 

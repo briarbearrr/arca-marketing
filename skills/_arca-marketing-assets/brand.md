@@ -9,6 +9,11 @@ HOW TO USE:
 - The example values shown here are filled in for the "Arca" brand. Treat them as a
   worked example of how to fill each field, not as required content.
 - When you run any of the prompt templates, paste or attach this file as the BRAND PROFILE.
+- The rendered design board (`assets/design-guide.png`) is the CANONICAL visual reference. The
+  carousel, storyboard, and design-guide skills ANCHOR their renders to it (feed it in as a style
+  reference) and read the art direction below from this profile. They must NOT impose a default
+  "editorial SaaS" look — every brand's look comes from THIS file + its own board. Keep the board
+  in sync with this profile.
 
 If a field is left blank, the templates may proceed on smart, clearly stated assumptions.
 
@@ -93,6 +98,14 @@ moving fast, hiring too slowly, and trying to get more leverage from people + AI
 ====================================================================
 8. VISUAL WORLD
 ====================================================================
+ART DIRECTION (render medium & finish — the look downstream renders must follow):
+- Medium & finish: mature 2D editorial illustration, subtle shading, clean modern shapes.
+  (This is ARCA's choice. A different brand states its OWN here — e.g. photographic, flat
+  vector, 3D, collage, hand-drawn, risograph — and the kit follows that, never a default.)
+- The carousel / storyboard / design-guide skills must READ this medium + the typography +
+  character style from this profile and ANCHOR to the rendered design board image. They must
+  NOT assume "editorial SaaS." Editorial is Arca's pick, not a kit default.
+
 A mature "execution navigation" style, applied with restraint. The visual world is built
 from: maritime navigation, execution systems, tactical work, mature human operators, and
 recurring real-world work objects.
