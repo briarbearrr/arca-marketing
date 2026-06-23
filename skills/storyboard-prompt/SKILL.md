@@ -331,7 +331,7 @@ ALWAYS output this block (unless the user is in CONCEPT-FIRST MODE and hasn't ap
 TYPE: <video type> · LENGTH: <N>s · FORMAT: <TikTok/Reels/Shorts>
 LOOK LOCK: <palette> · <environment fingerprint> · mood: <2–4 keywords>
 CHARACTER(S) (paste verbatim into every shot): <Name> — <1-line bible>
-USE THE BOARD (master reference): zero-ref video model (Kling V3) → feed the CHARACTER REFERENCE panel + each STORYBOARD cell into imageAI to design that shot's start frame (identity = startFrame + bible); ref-capable model (Seedance/Veo/O1) → wire the board + storyboard frames in as videoAI referenceImages. Never reproduce board labels/scaffolding in the footage.
+USE THE BOARD (master reference): zero-ref video model (Kling V3 Turbo, the default) → feed the CHARACTER REFERENCE panel + each STORYBOARD cell into imageAI to design that shot's start frame (identity = startFrame + bible); ref-capable model (Seedance/Veo/O1) → wire the board + storyboard frames in as videoAI referenceImages. Never reproduce board labels/scaffolding in the footage.
 SHOTS (flow, in order):
 1 · <lens|dur|MOVE|SIZE> — <one-line visual> — <Speaker> says: "<dialogue>" — delivery: <emotion + tone>
 2 · <…> — <Speaker> says: "<dialogue>" — delivery: <…>
