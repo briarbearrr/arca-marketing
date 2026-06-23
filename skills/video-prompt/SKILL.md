@@ -1,6 +1,6 @@
 ---
 name: video-prompt
-description: Use when turning a storyboard or production board into a finished vertical short-form video of any type (UGC, cinematic / movie-trailer, animation, product film, etc.). Handles photographic storyboards (clean and use as start frames), schematic / annotated plans (do NOT upscale 1:1 — rebuild with Wyren clips, on-screen UI generated diegetically, never composited), and comprehensive PRODUCTION BOARDS (character-reference turnaround + environment + floor plan + per-cut storyboard strip) — which it uses as the reference image: for zero-reference video models (Kling V3) the board feeds the IMAGE stage to design each start frame; for reference-capable models (Seedance, Veo, Kling O1) the board / its storyboard frames feed the video model directly as reference images. Drives the Wyren MCP — picks image/video models and resolutions, forces phone-camera realism on the start frames (so they don't look like stock/AI photos), generates multi-angle coverage so the edit can cut fast like real UGC, optimizes the TikTok first 5 seconds, and keeps character faces consistent across shots. Triggers on "make the video from this storyboard", "generate the short", "render the clips". Part of the arca-marketing-video kit.
+description: Use when turning a storyboard or production board into a finished vertical short-form video of any type (UGC, cinematic / movie-trailer, animation, product film, etc.). Handles photographic storyboards (clean and use as start frames), schematic / annotated plans (do NOT upscale 1:1 — rebuild with Wyren clips, on-screen UI generated diegetically, never composited), and comprehensive PRODUCTION BOARDS (character-reference turnaround + environment + floor plan + per-cut storyboard strip) — which it uses as the reference image: for zero-reference video models (Kling V3 Turbo) the board feeds the IMAGE stage to design each start frame; for reference-capable models (Seedance, Veo, Kling O1) the board / its storyboard frames feed the video model directly as reference images. Drives the Wyren MCP — picks image/video models and resolutions, forces phone-camera realism on the start frames (so they don't look like stock/AI photos), generates multi-angle coverage so the edit can cut fast like real UGC, optimizes the TikTok first 5 seconds, and keeps character faces consistent across shots. Triggers on "make the video from this storyboard", "generate the short", "render the clips". Part of the arca-marketing-video kit.
 ---
 
 # Video Prompt
@@ -19,7 +19,7 @@ Before generating, ask for any of these not already provided, then wait for answ
 5. **VIDEO SEGMENT** — FULL VIDEO / PART 1 / PART 2.
 6. **TARGET DURATION** — default 15–20s; only exceed 20s if the user explicitly asks.
 7. **IMAGE MODEL + RESOLUTION** — which model cleans/upscales storyboard frames into start frames, at what size. Default: Nanobanana Pro at 2K.
-8. **VIDEO MODEL + RESOLUTION** — which model generates clips, at what resolution, which mode (std/pro). Default: Kling V3 at 720p.
+8. **VIDEO MODEL + RESOLUTION** — which model generates clips, at what resolution, which mode (std/pro). Default: Kling V3 Turbo at 720p (faster + cheaper than plain Kling V3, same capabilities, native audio always on).
 9. **ASPECT RATIO** — default 9:16 vertical.
 10. **NATIVE AUDIO** — whether the video model synthesizes dialogue/sound (some models only). Default: on if the model supports `sound`.
 
@@ -41,19 +41,21 @@ The question that always surfaces late — "shouldn't the storyboard be a refere
 
 | Model | Ref images | Native audio | Multishot | Start frame | Duration |
 | --- | --- | --- | --- | --- | --- |
-| **Kling V3** (default) | **0** (none) | yes (`sound`) | yes (≤6) | yes | 3–15s |
+| **Kling V3 Turbo** (default) | **0** (none) | yes (`sound`, always on) | yes (≤6) | yes | 3–15s |
+| Kling V3 (quality tier) | **0** (none) | yes (`sound`) | yes (≤6) | yes | 3–15s |
 | Kling O1 | yes (≤7) | **no** | **no** | yes | — |
 | Kling V2.6 | 0 | yes (+voice clone) | no | yes | 5/10s |
 | Veo 3.1 Fast/Std | ≤3 | yes | no | yes | 4/6/8s |
 | Seedance 2.0 / Fast | ≤4 | no | yes | yes | 4–15s (480/720p) |
 
-- **Kling V3 takes ZERO reference images** (`maxReferenceImages: 0`). The storyboard does NOT feed the video model — it drives the IMAGE stage only (becomes/designs the start frame). Identity on V3 = per-shot **startFrame + the verbatim character bible** in each shot prompt, never a reference image.
-- **Only Kling O1 accepts reference images** — but it LOSES native audio AND multishot. Choosing O1 for face-locking means giving up scripted dialogue + in-generation angle changes; usually not worth it. Prefer V3 (audio + multishot) with startFrame-driven identity.
+- **Kling V3 Turbo is the default** — it's the faster, cheaper Kling V3 with **identical** capabilities (zero ref images, multishot ≤6, 3–15s, std/pro, 720p/1080p, native audio always on). Same graph wiring as V3; pick it unless the user explicitly wants the higher-fidelity plain **Kling V3** (slower, costs more) for a hero shot.
+- **Kling V3 Turbo takes ZERO reference images** (`maxReferenceImages: 0`). The storyboard does NOT feed the video model — it drives the IMAGE stage only (becomes/designs the start frame). Identity on the V3 family = per-shot **startFrame + the verbatim character bible** in each shot prompt, never a reference image.
+- **Only Kling O1 accepts reference images** — but it LOSES native audio AND multishot. Choosing O1 for face-locking means giving up scripted dialogue + in-generation angle changes; usually not worth it. Prefer V3 Turbo (audio + multishot) with startFrame-driven identity.
 - **Kling V3 Omni is disabled** — do not route to it.
-- Net: dialogue UGC skit → default **Kling V3**, identity via startFrame + bible, audio native. Reach for a ref-image model (O1/Veo/Seedance) only when face-lock genuinely beats audio+multishot.
+- Net: dialogue UGC skit → default **Kling V3 Turbo**, identity via startFrame + bible, audio native. Step up to plain **Kling V3** only when a shot needs the extra fidelity; reach for a ref-image model (O1/Veo/Seedance) only when face-lock genuinely beats audio+multishot.
 
 ### DECISION RULE — multishot vs separate clips
-- **Many quick dialogue beats + native audio → ONE Kling V3 multishot per part** (not many tiny separate clips). Multishot keeps face/voice continuous and gives angle changes in one generation.
+- **Many quick dialogue beats + native audio → ONE Kling V3 Turbo multishot per part** (not many tiny separate clips). Multishot keeps face/voice continuous and gives angle changes in one generation.
 - Watch the math: **Kling's minimum clip is 3s**, multishot maxes at 15s, so one multishot merge caps at **~5 beats** (5 × 3s = 15s). If a part has >5 dialogue beats, split into a second multishot/part rather than crushing beats below 3s.
 - **Native audio nails the exact scripted lines** — for a dialogue skit you do NOT need a separate TTS pass. Write the real lines into each shot's prompt (the storyboard FLOW table's Dialogue column) and let the model speak them. Fall back to TTS/editor-added VO only when the model has no `sound`.
 
@@ -84,7 +86,7 @@ When the storyboard arrives as a comprehensive PRODUCTION BOARD (from `storyboar
 
 ### MODEL ROUTING — where the board is fed (driven by the capability matrix)
 The board is a REFERENCE IMAGE, but WHERE it connects depends on whether the chosen video model accepts reference images:
-- **Zero-reference video models (Kling V3 / V3 multishot / V2.6, `maxReferenceImages: 0`):** the board CANNOT go to the video model. Feed it to the **IMAGE stage** — pass the board (or the cropped CHARACTER REFERENCE panel + the relevant STORYBOARD cell) into `imageAI` as the reference to DESIGN each shot's start frame, then drive the clip with that `startFrame` + the verbatim bible. (This is the default Kling V3 path.)
+- **Zero-reference video models (Kling V3 Turbo / V3 / V3 multishot / V2.6, `maxReferenceImages: 0`):** the board CANNOT go to the video model. Feed it to the **IMAGE stage** — pass the board (or the cropped CHARACTER REFERENCE panel + the relevant STORYBOARD cell) into `imageAI` as the reference to DESIGN each shot's start frame, then drive the clip with that `startFrame` + the verbatim bible. (This is the default Kling V3 Turbo path.)
 - **Reference-capable video models (Seedance 2.0 ≤4, Veo 3.1 ≤3, Kling O1 ≤7):** feed the board / its STORYBOARD frames + CHARACTER REFERENCE **directly into the `videoAI` node as `referenceImages`** — the video model uses the storyboard as a direct visual reference. Still set a start frame when the model+mode supports one. (Mind each model's max ref count; if the board plus character refs exceed it, send the most load-bearing crops — character close-up + the target storyboard cell.)
 - Either way, the board NEVER gets reproduced as on-screen graphics; it only conditions generation.
 
@@ -147,17 +149,18 @@ This template runs alongside the Wyren MCP. Confirm settings with the user durin
 
 ### Step B — generate the clips (video model, `videoAI` node)
 Video models (category "video") and key knobs:
-- **Kling V3** (default) — 3–15s, 720p/1080p, std/pro, native audio (`sound`), multishot ≤6, startFrame. Good all-rounder; only model with a true 15s clip.
+- **Kling V3 Turbo** (default) — 3–15s, 720p/1080p, std/pro, native audio (`sound`, always on), multishot ≤6, startFrame. The faster + cheaper Kling V3 with identical capability; the default all-rounder.
+- **Kling V3** (quality tier) — same 3–15s, 720p/1080p, std/pro, native audio, multishot ≤6, startFrame as Turbo, but slower and pricier. Reach for it only when a hero shot needs the extra fidelity.
 - **Kling V2.6** — 5s/10s, 720p/1080p, std/pro, native audio + voice cloning, startFrame.
 - **Kling V2.5 Turbo** — 5s/10s, 720p/1080p; start/end frames only in PRO mode (1080p).
 - **Veo 3.1 Fast/Standard** (Google) — 4/6/8s, 720p/1080p/4K, built-in audio, up to 3 reference images.
 - **Seedance 2.0 / 2.0 Fast** (ByteDance) — 4–15s, 480p/720p only; Fast is ~3× faster, ~5× cheaper. Pick Seedance when the user wants the grainier low-res 480p phone look or the cheapest path.
 
-Resolutions: 480p (Seedance only), 720p, 1080p, 4K (Veo only). Default 720p for UGC. Mode: use `pro` when relying on start/end frames; `std` is cheaper. Native audio: enable on `sound`-capable models (Kling V3, V2.6, Veo); else leave dialogue/SFX for `shorts-editor`. startFrame: confirm via `get_model_capabilities` that the chosen model+mode+resolution actually accepts a start frame before wiring `imageAI → videoAI`; if not, pick another model/mode or go text-only.
+Resolutions: 480p (Seedance only), 720p, 1080p, 4K (Veo only). Default 720p for UGC. Mode: use `pro` when relying on start/end frames; `std` is cheaper. Native audio: enable on `sound`-capable models (Kling V3 Turbo — always on, V3, V2.6, Veo); else leave dialogue/SFX for `shorts-editor`. startFrame: confirm via `get_model_capabilities` that the chosen model+mode+resolution actually accepts a start frame before wiring `imageAI → videoAI`; if not, pick another model/mode or go text-only.
 
 ### Wyren execution flow (load the wyren skill first)
 1. `list_models` + `get_model_capabilities` to lock the exact image/video model, resolution, mode, duration.
-2. `build_graph`: `imageInput` (start-frame source, characters.png, logo.png, AND the production board / its cropped character-reference + storyboard cell if you have one) → `imageAI` (A: clean/upscale photo panel; B: design fresh start frame from the board reference) → `videoAI` (chosen model/resolution/mode/duration). **Route the board per MODEL ROUTING:** zero-ref models (Kling V3) → board into `imageAI` only; reference-capable models (Seedance/Veo/O1) → also wire the board / storyboard frames into `videoAI` as `referenceImages`. Use multishot or per-clip nodes per the split rule.
+2. `build_graph`: `imageInput` (start-frame source, characters.png, logo.png, AND the production board / its cropped character-reference + storyboard cell if you have one) → `imageAI` (A: clean/upscale photo panel; B: design fresh start frame from the board reference) → `videoAI` (chosen model/resolution/mode/duration). **Route the board per MODEL ROUTING:** zero-ref models (Kling V3 Turbo / V3) → board into `imageAI` only; reference-capable models (Seedance/Veo/O1) → also wire the board / storyboard frames into `videoAI` as `referenceImages`. Use multishot or per-clip nodes per the split rule.
 3. `validate_workflow` — resolve warnings with the user.
 4. Estimate cost: `get_pricing` (chain mode) / `estimate_product_cost`; get the user's OK to spend.
 5. `run_workflow` (`userConfirmed: true`), then poll for completion. **`get_workflow_run_status` lags badly** — it can still show `pending` ~10 min after a job already succeeded, so treat **`get_node_outputs` as the source of truth** for whether a node is done, not the run status. There is a single video worker, so `run_node` jobs queue and run ~sequentially; `cancel_job` is wedge-risky, so let redundant jobs finish rather than cancel.
@@ -170,7 +173,7 @@ Resolutions: 480p (Seedance only), 720p, 1080p, 4K (Veo only). Default 720p for 
 - **`run_workflow` re-runs ALL nodes.** To regenerate just a few nodes (a reshot clip, a fixed frame) WITHOUT clobbering already-approved outputs, call **`run_node` per node** instead of re-running the whole workflow.
 
 ## RECURRING CHARACTER CONSISTENCY (multishot / multi-clip)
-Any time the video is more than one shot — a multi-clip split (Part 1/Part 2) or video-model multishot (Kling V3 ≤6 shots) — the same person must look identical in every shot. Faces, hair, build, age, wardrobe drift badly across independent generations. Lock identity FIRST, for each recurring character (e.g. the Arca Navigator).
+Any time the video is more than one shot — a multi-clip split (Part 1/Part 2) or video-model multishot (Kling V3 Turbo ≤6 shots) — the same person must look identical in every shot. Faces, hair, build, age, wardrobe drift badly across independent generations. Lock identity FIRST, for each recurring character (e.g. the Arca Navigator).
 
 **Step 0 — secure a character profile BEFORE any shot:**
 1. **If the storyboard is a PRODUCTION BOARD, you already have the profile** — crop its CHARACTER REFERENCE panel (front/side/back turnaround + facial/side close-ups + wardrobe detail) and use that as the reference; skip regenerating. Otherwise generate a character profile / face reference with **Nanobanana Pro** (≤14 reference images, up to 4K) seeded with `characters.png` + the persona description from `brand.md`. Produce a clean reference: front face + 3/4 face (+ head-to-waist) of the SAME person — consistent face, hair, skin, age, build, wardrobe — in the casual phone-UGC look (natural skin texture, real lighting), NOT glamour/studio. One profile image per recurring character.
@@ -178,7 +181,7 @@ Any time the video is more than one shot — a multi-clip split (Part 1/Part 2) 
 
 **Then for EACH shot / clip:**
 - Use the profile image as the shot's **startFrame** whenever the action allows — the first frame anchors identity for the whole clip. For mid-action shots, first generate that shot's start frame from the profile via image AI (Nanobanana Pro with the profile as reference), then feed it as the startFrame so the face is locked before any motion.
-- If the model accepts **referenceImages**, pass the profile as a reference too: Veo 3.1 (≤3), Kling O1 (≤7), Seedance 2.0 (≤4). Note: **Kling V3 / V3 multishot does NOT accept reference images** (`maxReferenceImages: 0`) — there, identity = per-shot startFrame + the verbatim character bible in each shot's prompt.
+- If the model accepts **referenceImages**, pass the profile as a reference too: Veo 3.1 (≤3), Kling O1 (≤7), Seedance 2.0 (≤4). Note: **Kling V3 Turbo / V3 / V3 multishot does NOT accept reference images** (`maxReferenceImages: 0`) — there, identity = per-shot startFrame + the verbatim character bible in each shot's prompt.
 - Repeat the exact character bible text in every shot prompt; never paraphrase between shots.
 - Keep the CONTINUITY LOCKS (same face, hair, wardrobe, props, setting, lighting) in force.
 
@@ -190,7 +193,7 @@ If two characters recur, build a separate profile + bible for each, and keep bot
 - **Push extras out of focus.** Keep background people incidental, turned away, blurred, or cropped — never ask the model to hold a face it doesn't need to. An extra the viewer can't study can't visibly drift.
 
 ## DEFAULT SPLIT RULE
-**The default 15–20s video is usually ONE part** — a single Kling V3 multishot (up to 15s) plus a short final clip if needed. Only SPLIT into two parts when the user explicitly asked for a LONGER video (>~20s). When you do split: **Part 1 = Panels 1–5; Part 2 = Panels 6–9.** Each part feels like one continuous video. Part 2 continues the same character, wardrobe, props, lighting, setting, camera quality, and emotional energy — do not restart the story, do not recap. Never show the storyboard grid, panel numbers, production notes, borders, arrows, labels, or annotations. Convert panels into real-feeling vertical footage.
+**The default 15–20s video is usually ONE part** — a single Kling V3 Turbo multishot (up to 15s) plus a short final clip if needed. Only SPLIT into two parts when the user explicitly asked for a LONGER video (>~20s). When you do split: **Part 1 = Panels 1–5; Part 2 = Panels 6–9.** Each part feels like one continuous video. Part 2 continues the same character, wardrobe, props, lighting, setting, camera quality, and emotional energy — do not restart the story, do not recap. Never show the storyboard grid, panel numbers, production notes, borders, arrows, labels, or annotations. Convert panels into real-feeling vertical footage.
 
 ## INPUTS
 - Storyboard reference: [ATTACH 3×3 STORYBOARD IMAGE]
@@ -249,7 +252,7 @@ When you split (Part 1/Part 2 or multishot), the very first clip MUST deliver th
 A single continuous clip per beat reads as a slow AI ad. Real engaging UGC is CUT FAST and constantly SWITCHES ANGLE and shot size. This operationalizes "new beat every 2–4s" for GENERATION and **overrides the one-shot-per-panel default**: a storyboard panel is a BEAT — usually several shots, not one clip. You cannot cut between angles you never generated.
 - Cut roughly every 1–2.5s. No talking shot holds longer than ~3s without a cut, angle change, or reframe. The whole video should feel like many short shots, not a few long ones.
 - Cover each beat from MULTIPLE angles/shot sizes, then cut between them. Generate 2–3 variations per beat from the FRAMING + CAMERA set: wide/establishing → medium close-up → tight close-up → over-the-shoulder → desk-level POV → reaction insert. Vary framing on EVERY cut (never two same-size shots back to back).
-- Use the model's multishot where available (Kling V3 ≤6 shots) to get angle changes inside one generation; otherwise generate several short clips per beat with different framings and assemble.
+- Use the model's multishot where available (Kling V3 Turbo ≤6 shots) to get angle changes inside one generation; otherwise generate several short clips per beat with different framings and assemble.
 - Intercut B-roll / insert shots between talking shots — hands on keyboard, the screen, paper packet, a face reaction, an object. Inserts let you cut on every sentence and hide jumps.
 - Punctuate with the TRANSITIONS vocabulary (jump cuts, reaction cuts, quick whip-pans, match cuts, camera repositioning) and snap zooms / handheld punch-ins — never slow dissolves or cinematic moves.
 - Keep continuity locked across angle changes (same person/face, wardrobe, set, lighting) via the character profile — fast cuts must not become a different person.
