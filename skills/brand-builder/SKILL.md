@@ -8,7 +8,9 @@ description: Use when a user needs to create or rewrite their brand profile (bra
 You interview the user about their brand and produce a complete, well-structured `brand.md` — the single source of truth that the carousel, storyboard, video, design-guide, and shorts-editor skills all read from. Your output retargets the entire kit to one brand.
 
 ## What you write (and where)
-The canonical profile lives at `../_arca-marketing-assets/brand.md`. When you finish, you OVERWRITE that file with the new brand's profile (after showing the full draft and getting a yes). Every other skill reads that exact path, so once it is written the whole kit speaks in the new brand's voice. Assets live in `../_arca-marketing-assets/assets/` (`logo.png`, `characters.png`, `design-guide.png`, `final-cta.png`) — remind the user to swap those for their own brand too (logo first; the `design-guide` skill regenerates the board, the `carousel`/`storyboard`/`video` skills regenerate characters).
+The canonical profile lives at `../_arca-marketing-assets/brand.md`. When you finish, you OVERWRITE that file with the new brand's profile (after showing the full draft and getting a yes). Every other skill reads that exact path, so once it is written the kit's COPY and voice retarget to the new brand.
+
+**But text alone does not change how the output LOOKS.** The shipped assets — `logo.png`, `characters.png`, `design-guide.png`, `final-cta.png` — are all still the EXAMPLE brand's (Arca's). The carousel and design-guide skills derive the visual style from `design-guide.png`, so until the user regenerates their OWN board, every carousel/thumbnail keeps coming out looking like Arca no matter what `brand.md` says. This is the #1 cause of "all our students' graphics look the same." Make this explicit to the user, and tell them the visual skills now GATE on it (they stop and route back here / to `design-guide` if the board is still Arca's). The swap order: (1) logo, (2) run `design-guide` to render this brand's board, (3) the `carousel`/`storyboard`/`video` skills regenerate characters as they run.
 
 Read the EXISTING `../_arca-marketing-assets/brand.md` first — but only as a worked EXAMPLE of how each of the 15 sections is filled (it is currently the "Arca" brand). Do not copy its content into the new brand. Use it to understand the shape, depth, and tone of a good answer per section.
 
@@ -75,7 +77,7 @@ Keep the same top matter the example uses (the "BRAND PROFILE" title + the "HOW 
 1. Show the full assembled `brand.md` draft in the chat.
 2. Ask the user to confirm or request edits. Apply edits inline until they approve.
 3. On approval, OVERWRITE `../_arca-marketing-assets/brand.md` with the approved content. (This is a deliberate retarget — never write it silently; always confirm first.)
-4. Then tell the user the next steps: swap `../_arca-marketing-assets/assets/logo.png` for their logo, run the `design-guide` skill to regenerate the brand board, and the other skills will now generate on-brand content automatically.
+4. Then tell the user the next steps, in order, and be explicit that the LOOK does not change until step 2 is done: (1) swap `../_arca-marketing-assets/assets/logo.png` for their logo; (2) **run the `design-guide` skill to regenerate the brand board** — this is what actually changes how carousels/thumbnails look, and the visual skills gate on it (they'll refuse to generate against Arca's board); (3) after that the carousel/storyboard/video skills generate on-brand content and regenerate characters as they run. Without step 2, expect Arca-looking graphics.
 
 ## QUALITY BAR (self-check before saving)
 - Could a stranger generate on-brand content from this file alone, without ever seeing the brand's site? If not, add specifics.

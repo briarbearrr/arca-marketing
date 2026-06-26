@@ -12,9 +12,8 @@ on-screen graphics / zooms / SFX layered in, or a brand splash / end card.
 Built on HyperFrames + ffmpeg + faster-whisper.
 
 ## Brand profile (read first)
-Read `../_arca-marketing-assets/brand.md` for the brand's colors, logo rules, and persona. The brand-splash end card
-uses `../_arca-marketing-assets/assets/final-cta.png`; the logo (`../_arca-marketing-assets/assets/logo.png`) may appear as a subtle
-in-world mark. **Never place the logo in the TOP-RIGHT corner** — put the watermark bottom-left or bottom-right (subtle, small), and keep it out of the face and the platform UI safe zone. `silence_cut.py` and `composition.template.html` are co-located in this skill folder.
+Read `../_arca-marketing-assets/brand.md` for the brand's colors and persona. The brand-splash end card
+uses `../_arca-marketing-assets/assets/final-cta.png`. **NEVER composite the brand logo onto the footage — no corner watermark, no overlay logo, anywhere.** A pasted-on logo reads as a fake watermark and kills the native feel; the brand mark only ever appears DIEGETICALLY (filmed as a real in-world prop) in the generated footage upstream (`video-prompt`), never added here. The ONLY brand graphic the editor places is the end splash card (`final-cta.png`). `silence_cut.py` and `composition.template.html` are co-located in this skill folder.
 This skill is the final edit stage after `video-prompt` (or runs standalone on any raw footage).
 
 ## Overview
@@ -56,8 +55,8 @@ All paths below are inside the project dir: source from `clips/`, working files 
 
    **Mind the tail / SFX.** AI clips often land the FINAL WORD right at the out-point, so the ~0.1s pad after the last word matters, and **never land a transition SFX on a cut where a word ends** (it steps on the last word — see the SFX layer).
 4. **Re-transcribe the ASSEMBLED cut** (`edit/tight.mp4` — for raw footage OR an assembled AI-clip video), regroup into caption phrases (sentence-aware, 3-5 words). The silence-cut shifts every timestamp, so always re-transcribe and recompute **caption, zoom, SFX, and splash** timing from the NEW boundaries; never remap old times.
-5. **Scan faces, then build the composition.** FIRST sample frames across the cut (`ffmpeg -i edit/tight.mp4 -vf fps=2 edit/faces/f_%03d.png`) and READ them to note which vertical band each scene's face(s) occupy (see FACE-SAFE PLACEMENT) — faces move between shots, so map them per scene. THEN build `edit/composition/` from `./composition.template.html` (muted plate + dialogue audio + word-pop captions + zooms + logo + splash + SFX, no chips by default), placing captions and EVERY graphic in a band that clears the detected faces. Lint clean.
-6. **Draft render + FACE-SAFE & SAFE-AREA CHECK** (`--quality draft`) → `edit/frames/`: extract a frame at EVERY caption / chip / logo / splash beat, READ each one, and confirm NO caption, figure, logo, or graphic (a) overlaps a face OR (b) crosses the platform safe margins — nothing under the right action rail (~120–150px), the bottom UI (~300–340px), or the top (~120px); the widest punch caption is the usual offender. If any does, move/shrink that element (or nudge the plate up via the cover-fit transform) and re-render — do NOT proceed to the high render until every overlay clears every face AND sits inside the safe area. Then **`--quality high`** and **master** into `out/`:
+5. **Scan faces, then build the composition.** FIRST sample frames across the cut (`ffmpeg -i edit/tight.mp4 -vf fps=2 edit/faces/f_%03d.png`) and READ them to note which vertical band each scene's face(s) occupy (see FACE-SAFE PLACEMENT) — faces move between shots, so map them per scene. THEN build `edit/composition/` from `./composition.template.html` (muted plate + dialogue audio + word-pop captions + zooms + splash + SFX, no chips and NO logo watermark by default), placing captions and EVERY graphic in a band that clears the detected faces. Lint clean.
+6. **Draft render + FACE-SAFE & SAFE-AREA CHECK** (`--quality draft`) → `edit/frames/`: extract a frame at EVERY caption / chip / splash beat, READ each one, and confirm NO caption, figure, or graphic (a) overlaps a face OR (b) crosses the platform safe margins — nothing under the right action rail (~120–150px), the bottom UI (~300–340px), or the top (~120px); the widest punch caption is the usual offender. If any does, move/shrink that element (or nudge the plate up via the cover-fit transform) and re-render — do NOT proceed to the high render until every overlay clears every face AND sits inside the safe area. Then **`--quality high`** and **master** into `out/`:
    `ffmpeg -i edit/raw.mp4 -c:v copy -af "loudnorm=I=-14:TP=-1.5,alimiter=limit=0.95" -c:a aac -b:a 192k out/<slug>-final.mp4`
    Master in a SINGLE video encode and `-c:v copy` on the mux — re-encoding the video across multiple passes stacks compression artifacts. To trim a span out of a FINISHED master, **ripple-cut** (cut video + audio + baked captions together so they stay in sync) — valid only if NO caption is mid-display across the cut window.
 
@@ -180,7 +179,7 @@ The #1 overlay failure is text or a figure landing ON someone's face. "Captions 
   - Face high / centered (common case) → captions in the lower third (default baseline ~300px from bottom).
   - Face LOW (in the lower third) → RAISE the captions to an upper band / top strip, OR push the plate up via the cover-fit / zoom transform so the face leaves the caption band. Never drop text onto a low face.
   - Two faces, or a face off to one side → use the genuinely clear band (top strip, or the empty side); never straddle a face.
-- **Every inserted element obeys this — not just captions:** word-pop captions, any chip / label, the logo watermark, engagement figures / graphics, and the splash. Each keeps the same face margin AND stays out of the platform UI safe zone (bottom ~10%).
+- **Every inserted element obeys this — not just captions:** word-pop captions, any chip / label, engagement figures / graphics, and the splash. Each keeps the same face margin AND stays out of the platform UI safe zone (bottom ~10%). (There is no logo watermark — the editor never composites the brand mark.)
 - **If no band is safe** at a given moment (a face fills the frame), shrink or move the element, delay it to a face-clear beat, or drop it — covering the face is never acceptable.
 - **Verify on real frames, not by assumption** (Pipeline step 6): extract the frame at every overlay beat, look, and move anything touching a face before the high render. When the face moves into the caption band mid-segment, re-place the captions (or the plate) for that segment and re-derive timing.
 
@@ -195,7 +194,7 @@ The #1 overlay failure is text or a figure landing ON someone's face. "Captions 
 | Font silently falls back | Anton/Archivo etc. are NOT auto-embedded; download `.woff2` to `fonts/` + `@font-face` |
 | SFX silent in the render | every `<audio>` needs an `id` |
 | Captions or graphics land on a face | don't assume lower-third is safe — sample frames, find the face per scene, place overlays in a band that clears it (raise captions or push the plate up when the face sits low), verify on extracted frames before the high render (see FACE-SAFE PLACEMENT) |
-| Logo lands in the top-right | move the watermark to a bottom corner (subtle, small); never top-right (the template may default there — override it) |
+| A brand logo / watermark shows up over the footage | the editor must NOT composite the logo anywhere — delete any `#logo` element; the brand mark belongs in the footage diegetically (upstream) and on the end splash only |
 | Peaks clip (max 0.0 dBFS) | master the final with `loudnorm + alimiter` |
 | HyperFrames duration looks off | its CLI duration summary misreports — trust `ffprobe` for true duration; the render also expects `index.html` in a project dir |
 | Is the dialogue audible over music? | you can't audition audio — checkpoint the mix / levels with the user before finalizing |

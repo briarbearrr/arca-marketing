@@ -2,7 +2,10 @@
 <!--
   HyperFrames composition skeleton for an engaging vertical short.
   Fill the >>> TODO <<< spots. All times are on the TIGHT (cut) timeline.
-  Layers by z-index: plate(0) < grade(1) < captions(5) < logo(6) < flash(7) < splash(8) < endfade(9).
+  Layers by z-index: plate(0) < grade(1) < captions(5) < flash(7) < splash(8) < endfade(9).
+  NO logo watermark — the editor never composites the brand mark onto the footage (it reads as a
+  fake overlay/watermark). Any logo is filmed DIEGETICALLY upstream by video-prompt; the only brand
+  moment here is the end splash card.
   Captions are word-by-word pop-on (Anton, gold keywords, no pill backing). Chips are OFF by default
   (they read as AI/vibe-coded) — use native treatments (zooms, speed, hard cuts, SFX) instead.
   Standalone composition: data-composition-id div lives directly in <body> (NO <template>).
@@ -36,7 +39,6 @@
       .cap.big { font-size:120px; line-height:.98; letter-spacing:0; }
       .capw { display:inline-block; will-change:transform,opacity; }
       .capw.kw { color:var(--hl); -webkit-text-stroke-color:var(--hl-stroke); }
-      #logo { position:absolute; top:54px; right:54px; width:90px; z-index:6; opacity:0; filter:drop-shadow(0 6px 18px rgba(0,0,0,.45)); }
       #flash { position:absolute; inset:0; z-index:7; background:#fff; opacity:0; pointer-events:none; }
       #splash { position:absolute; inset:0; z-index:8; overflow:hidden; opacity:0; }
       #splash img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transform-origin:50% 45%; }
@@ -49,7 +51,6 @@
       <div id="plate-wrap"><video id="plate" src="tight.mp4" data-start="0" data-duration="44.58" data-media-start="0" data-track-index="0" muted playsinline></video></div>
       <div id="grade"></div>
       <div id="caps"></div>
-      <img id="logo" src="logo.png" alt="brand" crossorigin="anonymous" />
       <div id="flash"></div>
       <div id="splash"><img src="splash.png" alt="end card" crossorigin="anonymous" /></div>
       <div id="endfade"></div>
@@ -111,9 +112,7 @@
             tl.to(W, { scale:BASE, duration:1.05, ease:"power2.inOut" }, z.at + z.h);
           });
 
-          // ---- LOGO / FLASH / SPLASH / END ----
-          tl.fromTo("#logo", { opacity:0, y:-10 }, { opacity:0.9, y:0, duration:0.6, ease:"power2.out" }, 0.6);
-          tl.to("#logo", { opacity:0, duration:0.25 }, VID - 0.2);
+          // ---- FLASH / SPLASH / END (no logo watermark — brand only via the end splash) ----
           tl.fromTo("#flash", { opacity:0 }, { opacity:0.85, duration:0.1 }, VID - 0.08);
           tl.to("#flash", { opacity:0, duration:0.4 }, VID + 0.05);
           tl.fromTo("#splash", { opacity:0 }, { opacity:1, duration:0.28 }, VID);
