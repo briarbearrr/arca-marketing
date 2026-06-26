@@ -14,7 +14,7 @@ This skill outputs a PROMPT (model-agnostic — paste into Nano Banana / GPT-Ima
 
 ---
 
-You are a brand designer laying out a premium "content identity system" one-pager. The board must feel like a real studio's brand sheet for THIS brand: organized and restrained, rendered in the brand's OWN art direction (the medium/finish, typography, and character style from `brand.md`) — not a cluttered AI collage, and not a generic editorial template. This board becomes the canonical style artifact the other kit skills anchor to, so its look must BE the brand's look. If the brand's art direction is photographic, flat-vector, 3D, collage, or hand-drawn, render the whole board (panels + sample slides) in THAT — don't default to editorial illustration.
+You are a brand designer laying out a professional, studio-quality "content identity system" one-pager. The board must feel like a real studio's brand sheet for THIS brand: clear and well-organized (so it's usable as a reference), but rendered in the brand's OWN art direction AND emotional register — the medium/finish, typography, character style, and mood (calm/premium, loud/energetic, playful, raw, luxe, …) all come from `brand.md` + what the brand actually is. It should NOT be a cluttered AI collage, and it should NOT default to a clean editorial template — "organized and restrained editorial" is Arca's look, not a kit requirement. This board becomes the canonical style artifact the other kit skills anchor to, so its look must BE the brand's look; if every brand's board comes out looking like a calm editorial sheet, this rule is being ignored. If the brand's art direction is photographic, flat-vector, 3D, collage, hand-drawn, maximalist, or anything else, render the whole board (panels + sample slides) in THAT — don't default to editorial illustration.
 
 ## INTAKE — confirm first
 Before writing the prompt, confirm (one short message, skip if already clear from brand.md):
@@ -35,7 +35,7 @@ Lay the board out as a tidy grid of labeled panels, each with a small numbered t
 - **07+ · CONTENT IN ACTION** — a bottom strip of 4–5 miniature sample content slides showing the brand applied: a hook slide, a founder-pain slide, a simple framework/loop, a before/after, and a CTA / case-study card. These are small but legible, and they make the board feel like a working system, not just swatches.
 
 ## STYLE RULES (bake into the prompt)
-- Premium and organized, rendered in the brand's own art direction (the medium/finish from `brand.md` — editorial is only Arca's pick) — like a real studio's brand sheet for THIS brand, not a generic editorial template. Generous whitespace, clean dividers between panels, consistent numbered tabs.
+- Cohesive and well-organized, rendered in the brand's own art direction and mood (the medium/finish from `brand.md` — premium/editorial is only Arca's pick) — like a real studio's brand sheet for THIS brand, not a generic editorial template. Keep panels legible and clearly divided with consistent numbered tabs; the amount of whitespace and the overall density follow the brand's style (a bold/maximalist brand's board can be denser and louder).
 - Use the brand's exact palette and the role mapping from `brand.md`. The accent anchors; the highlight is used sparingly on key words; the background is the brand background, not plain white unless the brand is white-led.
 - Characters and illustrations in the brand's defined character style from `brand.md` (Arca's is mature editorial; another brand may be photographic, flat-vector, 3D, or hand-drawn — follow the profile, don't default to editorial).
 - Typography matches the brand's type direction from `brand.md`. Spell every label and hex code correctly.
@@ -51,7 +51,7 @@ Output, in order:
    - State the format up front (single landscape brand-identity board, ~1448 × 1086, 4:3).
    - Walk the panels in reading order with their exact content and labels.
    - Specify the exact hex palette + role mapping, the typography feel, and the character style.
-   - End with the anti-clutter / do-not list (no neon AI clichés, no distorted logo, correct spelling, legible labels, restrained highlight use, organized editorial layout).
+   - End with the anti-clutter / do-not list (no neon AI clichés, no distorted logo, correct spelling, legible labels, restrained highlight use, organized and legible layout — in the brand's own style, not forced into an editorial template).
 4. **LOGO NOTE** — remind the user that most image models cannot ingest `logo.png`; either describe the mark precisely in the prompt or composite the real logo into the hero panel after rendering.
 5. **NEXT STEPS** — once rendered, save it over `../_arca-marketing-assets/assets/design-guide.png` so the other skills reference the new board, and use it as a style reference when generating carousels/storyboards.
 

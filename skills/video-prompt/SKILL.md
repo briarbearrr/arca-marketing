@@ -17,9 +17,9 @@ Before generating, ask for any of these not already provided, then wait for answ
 3. **BRAND PROFILE** — attached/pasted `brand.md`.
 4. **TARGET MARKET / AUDIENCE.**
 5. **VIDEO SEGMENT** — FULL VIDEO / PART 1 / PART 2.
-6. **TARGET DURATION** — default 15–20s; only exceed 20s if the user explicitly asks.
+6. **TARGET DURATION** — **default 15–20s** (one Kling V3 Turbo 720p multishot covers up to 15s; a short second clip reaches ~20s). **HARD CAP 30s — never generate more.** If the user wants 45s+/1-minute/multi-minute, WARN them it kills retention and burns Wyren credits, and steer to ≤30s. Never pad to fill time.
 7. **IMAGE MODEL + RESOLUTION** — which model cleans/upscales storyboard frames into start frames, at what size. Default: Nanobanana Pro at 2K.
-8. **VIDEO MODEL + RESOLUTION** — which model generates clips, at what resolution, which mode (std/pro). Default: Kling V3 Turbo at 720p (faster + cheaper than plain Kling V3, same capabilities, native audio always on).
+8. **VIDEO MODEL + RESOLUTION** — which model generates clips, at what resolution, which mode (std/pro). **Locked default: Kling V3 Turbo at 720p** (faster + cheaper than plain Kling V3, same capabilities, native audio always on). Stay on this unless the user explicitly names another model/resolution — don't switch on your own. Step up to plain Kling V3 or 1080p only for an explicitly-requested hero shot.
 9. **ASPECT RATIO** — default 9:16 vertical.
 10. **NATIVE AUDIO** — whether the video model synthesizes dialogue/sound (some models only). Default: on if the model supports `sound`.
 
@@ -30,7 +30,7 @@ Generated clips are slow and expensive to redo, and you **cannot fix broken dial
 
 - **Dialogue-only read (coherence).** Read just the spoken lines top-to-bottom, ignoring visuals. They must read as ONE coherent conversation: one through-line, each line *answers or escalates* the one before it, no non-sequiturs (a question gets answered), no contradictions (a claim isn't undercut by the next line). This mirrors `storyboard-prompt`'s dialogue-only pass — run it again here, because the handoff can still arrive incoherent and you are the LAST gate before spend.
 - **Order check.** Confirm the beat order actually builds: hook first (the first clip carries the first-5s cold open), tension/escalation in the middle, payoff/punchline last. If a beat is out of place, reorder the SHOT LIST now (cheap) — never plan to "fix it in the edit" (impossible once clips are generated with baked-in audio).
-- **Say it out loud (natural-dialogue test).** Read each line the way a real person would speak it. Rewrite anything stiff, written, robotic, on-the-nose, or over-explained. Real talk uses contractions, fragments, interruptions, filler ("I mean", "honestly", "wait"), and reactions; people don't narrate the obvious or recite exposition. Keep each speaker's voice consistent and distinct from the others.
+- **Say it out loud (natural-dialogue test) — HARD GATE, do not skip.** Native audio bakes these exact words and delivery into the clip; a stiff or AI-sounding line is unfixable after generation, so this gates spend. Read each line the way a real person would actually speak it, and REWRITE anything stiff, written, robotic, on-the-nose, over-explained, or AI-sounding before you build a single node. Real talk uses contractions, fragments, interruptions, filler ("I mean", "honestly", "wait"), and reactions; people don't narrate the obvious or recite exposition. Keep each speaker's voice consistent and distinct from the others. If any line still reads like writing, it is not ready to generate.
 - **Length vs duration budget.** Each line must fit its clip's seconds (~2–3 words/second; a 3s Kling shot ≈ 6–9 words). Trim lines that can't be said naturally in the beat's duration — rushed, crammed delivery reads as fake. If a beat truly needs more words, give it a longer clip or split it; never speed-talk to fit.
 - **Lock the cast.** Before writing any shot prompt, list EVERY speaking character by NAME with their one-line bible (from the handoff). You'll paste each into the shots where they appear so the model always knows who is who and who is speaking.
 
@@ -105,13 +105,13 @@ This skill makes ANY video type. The LOOK follows the chosen VIDEO TYPE; the Tik
 ## CORE OUTPUT
 Generate a finished vertical short-form video with:
 - Aspect ratio: [default 9:16 vertical portrait]
-- Resolution: [from chosen model; default 720p]
+- Resolution: [from chosen model; locked default 720p — Kling V3 Turbo]
 - Platform feel: TikTok / Instagram Reels / YouTube Shorts
 - Visual style: realistic phone-shot UGC (or chosen type's craft)
 - Camera style: handheld smartphone footage (UGC)
 - Production level: low-cost, casual, creator-shot (UGC)
 - Audio: native dialogue, voice, room tone, foley, SFX, risers, music — only if supported by the model
-- Duration: [TARGET DURATION — default 15–20s unless the user asked for longer]
+- Duration: [TARGET DURATION — 15–20s default (one Kling V3 Turbo 720p multishot ≈ 15s); 30s hard cap]
 - Max per generation: model-dependent (typically 15s)
 
 If the full video exceeds the model's max single-clip duration, split into multiple generated clips.
@@ -133,6 +133,11 @@ Rules: confirm/announce the slug once, then keep everything inside that folder; 
 ## GENERATION SETTINGS (image + video models, resolutions)
 This template runs alongside the Wyren MCP. Confirm settings with the user during intake, then drive Wyren. Always reconfirm live options with `list_models` + `get_model_capabilities` before building — the lists below are a current snapshot, not a contract (per-model resolution/duration/startFrame support changes).
 
+### START FRAME IS MANDATORY — never generate video text-only (hard rule)
+**Every clip must be driven by a `startFrame` produced by `imageAI` first.** NEVER run a `videoAI` node text-to-video with no start frame. Image-first is non-negotiable: a text-only generation is exactly where faces, hands, environments, and any on-screen text/UI come out garbled, morphing, and AI-looking, and you have no control over the opening frame the whole clip inherits. So the graph is ALWAYS `imageAI` (start frame) → `videoAI` (with that frame as `startFrame`). If the chosen video model+mode+resolution can't accept a start frame, switch to one that can — do NOT fall back to text-only.
+
+**Gate readable text / screens on the start frame.** Do NOT ask the video model to render any readable text, screen content, UI, sign, document, label, or logo in a shot UNLESS that exact content is already baked into the start frame (so it's locked, not invented mid-generation). Kling fabricates and morphs any text it has to invent (see KLING FRAGILITY). If a screen/sign/text can't be locked into the start frame, keep it **dim / out-of-focus / angled-away / partial**, or omit it — never let the video model improvise it. (Diegetic in-world text that IS in the start frame is fine; floating/composited text is still never added here — see DO NOT COMPOSITE TEXT/UI GRAPHICS.)
+
 ### Step A — produce a start frame per shot (image model, `imageAI` node)
 - **PHOTOGRAPHIC (path A):** crop each panel to 9:16, then upscale/clean into a usable first frame.
 - **SCHEMATIC (path B):** do NOT upscale the panel. Use image AI to DESIGN a new start frame from the character profile + the panel's brief (scene, action, framing), so the frame is real-looking footage, not a redraw of the mockup. Any on-screen UI is realized diegetically inside the clip (real screen/prop), never composited.
@@ -147,6 +152,13 @@ This template runs alongside the Wyren MCP. Confirm settings with the user durin
 **Image models (category "image"):** Nanobanana (Gemini 2.5 Flash Image, 1K, image input, default), Nanobanana Pro (Gemini 3 Pro Image, up to 4K, up to 14 reference images — best for keeping persona/logo consistent), Imagen 4 Fast/Standard/Ultra (text-only, 1K–2K, no image input). Sizes: 1K/2K/4K. Aspect ratios: 1:1, 4:3, 9:16, 16:9.
 **Default:** Nanobanana Pro at 2K (image input + multi-reference locks character + logo). Pass `characters.png` and `logo.png` as reference images — the `logo.png` file is REQUIRED whenever the mark is visible, never a text description (the model fabricates a wrong logo otherwise; see BRAND & LOGO RULES).
 
+**FALLBACK — image model errors or unavailable → hand the user a ChatGPT prompt (don't skip the start frame).** Because a start frame is mandatory, if the Wyren image model errors out, is disabled, or isn't connected, do NOT proceed to video without one and do NOT let the video model invent the frame. Instead give the user a ready-to-paste prompt to generate the start frame themselves in **ChatGPT (GPT-Image)** (or another image tool), then have them drop it into `<project-slug>/startframes/` and continue. The pasted prompt MUST bake in the phone-realism layer so the result doesn't look AI-generated or like a stock photo — assemble it as:
+- the scene + the character's verbatim bible (who's in frame, action, setting, framing);
+- the phone-camera realism tokens: **"shot on an iPhone, candid vertical phone snapshot, amateur, mild phone HDR, slight grain, imperfect framing, natural skin texture and pores, off-center handheld framing, mixed practical lighting, real lived-in clutter"**;
+- the negative prompt: **"NOT a stock photo, NOT an AI render, NOT 3D render, no glossy/airbrushed/retouched skin, no model/supermodel, no perfect symmetry, no studio/softbox/beauty lighting, no creamy bokeh or shallow depth of field, not hyperdetailed/8k, not cinematic, not a magazine or advertisement, not clean/sterile/staged"**;
+- tell them to **attach their character reference / `logo.png`** in ChatGPT so identity + any in-world mark stay consistent.
+(NON-UGC types: swap the phone-realism tokens for that type's craft, but keep the anti-AI / anti-stock negatives.)
+
 ### Step B — generate the clips (video model, `videoAI` node)
 Video models (category "video") and key knobs:
 - **Kling V3 Turbo** (default) — 3–15s, 720p/1080p, std/pro, native audio (`sound`, always on), multishot ≤6, startFrame. The faster + cheaper Kling V3 with identical capability; the default all-rounder.
@@ -156,13 +168,13 @@ Video models (category "video") and key knobs:
 - **Veo 3.1 Fast/Standard** (Google) — 4/6/8s, 720p/1080p/4K, built-in audio, up to 3 reference images.
 - **Seedance 2.0 / 2.0 Fast** (ByteDance) — 4–15s, 480p/720p only; Fast is ~3× faster, ~5× cheaper. Pick Seedance when the user wants the grainier low-res 480p phone look or the cheapest path.
 
-Resolutions: 480p (Seedance only), 720p, 1080p, 4K (Veo only). Default 720p for UGC. Mode: use `pro` when relying on start/end frames; `std` is cheaper. Native audio: enable on `sound`-capable models (Kling V3 Turbo — always on, V3, V2.6, Veo); else leave dialogue/SFX for `shorts-editor`. startFrame: confirm via `get_model_capabilities` that the chosen model+mode+resolution actually accepts a start frame before wiring `imageAI → videoAI`; if not, pick another model/mode or go text-only.
+Resolutions: 480p (Seedance only), 720p, 1080p, 4K (Veo only). Default 720p for UGC. Mode: use `pro` when relying on start/end frames; `std` is cheaper. Native audio: enable on `sound`-capable models (Kling V3 Turbo — always on, V3, V2.6, Veo); else leave dialogue/SFX for `shorts-editor`. startFrame: confirm via `get_model_capabilities` that the chosen model+mode+resolution actually accepts a start frame before wiring `imageAI → videoAI`; if it does not, pick another model/mode that does — **never go text-only** (a start frame is mandatory, see START FRAME IS MANDATORY above).
 
 ### Wyren execution flow (load the wyren skill first)
 1. `list_models` + `get_model_capabilities` to lock the exact image/video model, resolution, mode, duration.
 2. `build_graph`: `imageInput` (start-frame source, characters.png, logo.png, AND the production board / its cropped character-reference + storyboard cell if you have one) → `imageAI` (A: clean/upscale photo panel; B: design fresh start frame from the board reference) → `videoAI` (chosen model/resolution/mode/duration). **Route the board per MODEL ROUTING:** zero-ref models (Kling V3 Turbo / V3) → board into `imageAI` only; reference-capable models (Seedance/Veo/O1) → also wire the board / storyboard frames into `videoAI` as `referenceImages`. Use multishot or per-clip nodes per the split rule.
 3. `validate_workflow` — resolve warnings with the user.
-4. Estimate cost: `get_pricing` (chain mode) / `estimate_product_cost`; get the user's OK to spend.
+4. Estimate cost: `get_pricing` (chain mode) / `estimate_product_cost`; get the user's OK to spend. **CREDIT BUDGET — keep the TOTAL Wyren credits for the finished video around 500–750 or less.** If the estimate runs higher, flag it to the user and trim back toward budget BEFORE spending: shorten toward 15–20s (never exceed the 30s cap), use 720p not 1080p, Kling V3 Turbo not plain V3, `std` not `pro` where a start frame isn't required, and fewer separate generations (one multishot beats many tiny clips, and reshoot single nodes with `run_node` instead of re-running the whole graph). Only blow past ~750 with the user's explicit OK.
 5. `run_workflow` (`userConfirmed: true`), then poll for completion. **`get_workflow_run_status` lags badly** — it can still show `pending` ~10 min after a job already succeeded, so treat **`get_node_outputs` as the source of truth** for whether a node is done, not the run status. There is a single video worker, so `run_node` jobs queue and run ~sequentially; `cancel_job` is wedge-risky, so let redundant jobs finish rather than cancel.
 6. Pull clips with `get_node_outputs` and SAVE into the project dir: clips → `<project-slug>/clips/` (`clip-01.mp4`, `part1.mp4` …), and any designed/cleaned start frames → `<project-slug>/startframes/`. On-screen UI/data/screens were generated DIEGETICALLY inside the clips — no text-overlay pass here.
 7. EDIT & FINISH — hand the `<project-slug>/clips/` folder to `shorts-editor`: fast-cut assembly, spoken-word CAPTIONS, brand splash/end card, zoom/SFX timing, master into `<project-slug>/out/`. That is the ONLY place HyperFrames is used, and only for captions + splash + timing — never to composite text/UI graphics onto the footage.
@@ -193,7 +205,7 @@ If two characters recur, build a separate profile + bible for each, and keep bot
 - **Push extras out of focus.** Keep background people incidental, turned away, blurred, or cropped — never ask the model to hold a face it doesn't need to. An extra the viewer can't study can't visibly drift.
 
 ## DEFAULT SPLIT RULE
-**The default 15–20s video is usually ONE part** — a single Kling V3 Turbo multishot (up to 15s) plus a short final clip if needed. Only SPLIT into two parts when the user explicitly asked for a LONGER video (>~20s). When you do split: **Part 1 = Panels 1–5; Part 2 = Panels 6–9.** Each part feels like one continuous video. Part 2 continues the same character, wardrobe, props, lighting, setting, camera quality, and emotional energy — do not restart the story, do not recap. Never show the storyboard grid, panel numbers, production notes, borders, arrows, labels, or annotations. Convert panels into real-feeling vertical footage.
+**The default 15–20s video is usually ONE part** — a single Kling V3 Turbo 720p multishot (up to 15s) plus a short final clip if needed. Only SPLIT into two parts when the user explicitly asked for a LONGER video (>~20s, and never past the 30s cap). When you do split: **Part 1 = Panels 1–5; Part 2 = Panels 6–9.** Each part feels like one continuous video. Part 2 continues the same character, wardrobe, props, lighting, setting, camera quality, and emotional energy — do not restart the story, do not recap. Never show the storyboard grid, panel numbers, production notes, borders, arrows, labels, or annotations. Convert panels into real-feeling vertical footage.
 
 ## INPUTS
 - Storyboard reference: [ATTACH 3×3 STORYBOARD IMAGE]
