@@ -1,15 +1,23 @@
 ---
 name: shorts-editor
-description: Use when turning existing talking-head, interview, vox-pop, vlog, podcast, or UGC footage into a high-retention vertical short for TikTok, Instagram Reels, or YouTube Shorts — cut tighter, dead air / awkward pauses removed, captions added, graphics / zooms / SFX layered in, or a brand splash / end card. Built on HyperFrames + ffmpeg + faster-whisper. Part of the arca-marketing-video kit.
+description: Use when turning existing footage of ANY format — talking-head, interview, vox-pop, vlog, podcast, UGC, product ad, cinematic, or graphic-led — into a high-retention vertical short for TikTok, Instagram Reels, or YouTube Shorts — cut tighter, dead air / awkward pauses removed, captions or VO/on-screen text added, graphics / zooms / SFX layered in, or a brand splash / end card. Built on HyperFrames + ffmpeg + faster-whisper. Part of the arca-marketing-video kit.
 ---
 
 # Shorts Editor — Editing Engaging Vertical Shorts
 
-Turn existing talking-head, interview, vox-pop, vlog, podcast, or UGC footage into a
-high-retention vertical short for TikTok, Instagram Reels, or YouTube Shorts. Triggers when you
-have a raw clip and want it cut tighter, dead air / awkward pauses removed, captions added,
-on-screen graphics / zooms / SFX layered in, or a brand splash / end card.
-Built on HyperFrames + ffmpeg + faster-whisper.
+Turn existing footage of ANY format — talking-head, interview, vox-pop, vlog, podcast, UGC,
+product ad, cinematic, or graphic-led — into a high-retention vertical short for TikTok, Instagram
+Reels, or YouTube Shorts. Triggers when you have a raw clip and want it cut tighter, dead air /
+awkward pauses removed, captions or VO/on-screen text added, on-screen graphics / zooms / SFX
+layered in, or a brand splash / end card. Built on HyperFrames + ffmpeg + faster-whisper.
+
+**Adapt the edit to the format.** The layers below are tuned for fast dialogue-driven UGC; adjust for
+what you're handed: a **product ad or cinematic** piece wants fewer/slower cuts, breathing room on
+hero shots, and pacing that matches its craft (don't chop it into UGC jump-cuts); a **no-dialogue**
+piece (product/cinematic/motion-graphics) has no spoken words to caption — use the VO transcript,
+sparse on-screen text keyed to beats, or minimal/no captions instead of word-by-word pop-ons; a
+**testimonial/vox-pop** keeps the tight silence-cut + captions but a calmer cadence. Match the
+source format's intent — never force every input into the same fast-cut talking-head template.
 
 ## Brand profile (read first)
 Read `../_arca-marketing-assets/brand.md` for the brand's colors and persona. The brand-splash end card
@@ -22,7 +30,7 @@ Turn a finished-but-flat talking clip into a punchy 9:16 short. Engagement is la
 **Core principle:** retention is manufactured by deleting dead time and giving the eye a new beat every 2-4s. Cut the pauses first; every other layer just decorates the tightened result.
 
 ## When to use
-- You have raw footage (interview, vox-pop, vlog, podcast clip, UGC) and want a platform-native vertical edit.
+- You have raw footage of any format (interview, vox-pop, vlog, podcast, UGC, product ad, cinematic, graphic-led) and want a platform-native vertical edit — the layers adapt to the format (see above).
 - Requests like: "remove the awkward pauses/silences", "add captions", "make it engaging for Reels/TikTok", "add zooms / SFX / graphics", "add an end card/splash".
 
 Not for: generating footage from scratch, or pure motion-graphics pieces (use the `hyperframes` skill directly).

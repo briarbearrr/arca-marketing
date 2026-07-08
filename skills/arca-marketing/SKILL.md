@@ -18,6 +18,7 @@ If `brand.md` is still the example brand, start with `brand-builder`.
 | --- | --- | --- |
 | An Instagram/LinkedIn carousel (3–5 slides) | **`carousel-generator`** | "make a carousel about X" |
 | To pressure-test a video idea + a full production board | **`storyboard-prompt`** | "storyboard this idea" / "is this concept good?" |
+| ↳ It pitches 2–3 **distinct format directions** per idea (product ad, testimonial, cinematic, street interview, skit…) and you pick — so your videos don't all come out as the same office mockumentary. | | |
 | To turn that board into an actual AI video | **`video-prompt`** | "make the video from this storyboard" |
 | To cut/caption/polish existing footage into a short | **`shorts-editor`** | "remove the dead air and add captions" |
 
